@@ -4,17 +4,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MobyLabWebProgramming.Core.Entities
-{
-    public class JobRequest : BaseEntity
-    {
-        public Guid JobOfferId { get; set; }
-        public Guid JobSeekerId { get; set; }
-        public string CoverLetter { get; set; } = null!;
+namespace MobyLabWebProgramming.Core.Entities;
 
-        // Relatii
-        public JobOffer JobOffer { get; set; } = null!;
-        public User JobSeeker { get; set; } = null!;
-        public JobAssignment JobAssignment { get; set; } = null!;
-    }
+public class JobRequest : BaseEntity
+{
+    public Guid JobOfferId { get; set; }
+    public Guid JobSeekerId { get; set; }
+    public string CoverLetter { get; set; } = null!;
+
+    public Guid UserId { get; set; }
+
+    // Relatii
+    public JobOffer JobOffer { get; set; } = null!;
+    public User JobSeeker { get; set; } = null!;
+    public JobAssignment JobAssignment { get; set; } = null!;
 }
