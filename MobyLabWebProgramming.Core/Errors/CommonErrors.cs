@@ -10,4 +10,10 @@ public static class CommonErrors
     public static ErrorMessage UserNotFound => new(HttpStatusCode.NotFound, "User doesn't exist!", ErrorCodes.EntityNotFound);
     public static ErrorMessage FileNotFound => new(HttpStatusCode.NotFound, "File not found on disk!", ErrorCodes.PhysicalFileNotFound);
     public static ErrorMessage TechnicalSupport => new(HttpStatusCode.InternalServerError, "An unknown error occurred, contact the technical support!", ErrorCodes.TechnicalError);
+
+    public static ErrorMessage CompanyNotFound => new(HttpStatusCode.NotFound, "Company doesn't exist!", ErrorCodes.CompanyNotFound);
+    public static ErrorMessage CompanyAlreadyExists => new(HttpStatusCode.Conflict, "Company already exists!", ErrorCodes.CompanyAlreadyExists);
+    public static ErrorMessage Forbidden => new(HttpStatusCode.Forbidden, "You do not have permission to perform this action.", ErrorCodes.CannotAccess);
+
 }
+

@@ -17,5 +17,10 @@ public enum ErrorCodes
     CannotAdd,
     CannotUpdate,
     CannotDelete,
-    MailSendFailed
+    MailSendFailed,
+
+    // Coduri specifice
+    CompanyNotFound,
+    CompanyAlreadyExists,
+    CannotAccess
 }

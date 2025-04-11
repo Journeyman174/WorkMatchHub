@@ -186,6 +186,8 @@ public static class WebApplicationBuilderExtensions
             .AddScoped<ILoginService, LoginService>()
             .AddScoped<IFileRepository, FileRepository>()
             .AddScoped<IUserFileService, UserFileService>()
+            .AddScoped<ICompanyService, CompanyService>()
+
             .AddScoped<IMailService, MailService>();
 
         return builder;

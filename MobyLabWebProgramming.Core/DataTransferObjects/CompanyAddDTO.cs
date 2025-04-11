@@ -11,6 +11,5 @@ namespace MobyLabWebProgramming.Core.DataTransferObjects
         public string Name { get; set; } = null!;
         public string? Description { get; set; }
         public string? Location { get; set; }
-        public Guid UserId { get; set; } // user-ul care creeaza compania
     }
 }

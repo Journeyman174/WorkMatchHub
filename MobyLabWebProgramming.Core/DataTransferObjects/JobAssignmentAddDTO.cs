@@ -10,7 +10,5 @@ namespace MobyLabWebProgramming.Core.DataTransferObjects
     {
         public Guid JobRequestId { get; set; }
         public Guid JobOfferId { get; set; }
-        public DateTime AssignedAt { get; set; }
-        public Guid UserId { get; set; }
     }
 }
