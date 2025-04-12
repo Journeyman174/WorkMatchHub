@@ -33,14 +33,10 @@ public class JobOfferConfiguration : IEntityTypeConfiguration<JobOffer>
             .HasForeignKey(j => j.CompanyId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        builder.HasOne(j => j.Recruiter)
-            .WithMany()
-            .HasForeignKey(j => j.RecruiterId)
-            .OnDelete(DeleteBehavior.Restrict);
-
-        builder.HasOne<User>()
-            .WithMany()
+        builder.HasOne(j => j.User)
+            .WithMany(u => u.JobOffers) // legat direct de User.Recruiter (rol)
             .HasForeignKey(j => j.UserId)
             .OnDelete(DeleteBehavior.Restrict);
     }
 }
+

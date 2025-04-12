@@ -188,6 +188,7 @@ public static class WebApplicationBuilderExtensions
             .AddScoped<IUserFileService, UserFileService>()
             .AddScoped<ICompanyService, CompanyService>()
             .AddScoped<ISavedJobService, SavedJobService>()
+            .AddScoped<IJobOfferService, JobOfferService>()
 
             .AddScoped<IMailService, MailService>();
 

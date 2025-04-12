@@ -24,6 +24,7 @@ public enum ErrorCodes
     CompanyAlreadyExists,
     CannotAccess,
     JobAlreadySaved,
-    SavedJobNotFound
+    SavedJobNotFound,
+    JobOfferNotFound
 
 }

@@ -48,7 +48,7 @@ public class SavedJobService(IRepository<WebAppDatabaseContext> repository) : IS
             return ServiceResponse.FromError(CommonErrors.SavedJobNotFound);
         }
 
-        await repository.DeleteEntityAsync(entity, cancellationToken); // folosește noua metodă
+        await repository.DeleteEntityAsync(entity, cancellationToken); 
 
         return ServiceResponse.ForSuccess();
     }

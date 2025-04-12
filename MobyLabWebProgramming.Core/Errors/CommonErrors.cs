@@ -17,7 +17,11 @@ public static class CommonErrors
 
     public static ErrorMessage JobAlreadySaved => new(HttpStatusCode.Conflict, "Job is already saved!", ErrorCodes.JobAlreadySaved);
 
-    public static ErrorMessage SavedJobNotFound => new ErrorMessage(HttpStatusCode.NotFound, "Saved job not found.", ErrorCodes.SavedJobNotFound);
+    public static ErrorMessage SavedJobNotFound => new(HttpStatusCode.NotFound, "Saved job not found.", ErrorCodes.SavedJobNotFound);
+
+    public static ErrorMessage JobOfferNotFound => new(HttpStatusCode.NotFound, "Job offer not found.", ErrorCodes.JobOfferNotFound);
+
+    
 
 
 }

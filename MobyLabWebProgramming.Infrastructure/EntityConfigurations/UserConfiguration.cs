@@ -51,8 +51,9 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasMany(u => u.JobOffers)
-            .WithOne(jo => jo.Recruiter)
-            .HasForeignKey(jo => jo.RecruiterId)
+            .WithOne(jo => jo.User)
+            .HasForeignKey(jo => jo.UserId)
             .OnDelete(DeleteBehavior.Restrict);
+
     }
 }
