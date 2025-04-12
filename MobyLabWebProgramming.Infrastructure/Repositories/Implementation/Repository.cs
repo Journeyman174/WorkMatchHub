@@ -140,4 +140,21 @@ public sealed class Repository<TDb>(TDb dbContext) : IRepository<TDb> where TDb 
                 .Skip((pagination.Page - 1) * pagination.PageSize)
                 .Take(pagination.PageSize)
                 .ToListAsync(cancellationToken));
+
+
+    /// <summary>
+    /// Deletes a given entity instance directly from the database.
+    /// This method is useful when the entity has a composite key and cannot be identified by a single Guid ID.
+    /// </summary>
+    /// <typeparam name="T">The type of the entity to delete.</typeparam>
+    /// <param name="entity">The instance of the entity to be deleted.</param>
+    /// <param name="cancellationToken">Optional cancellation token to cancel the operation.</param>
+    /// <returns>The number of entities affected (1 if successful, 0 otherwise).</returns>
+    public async Task<int> DeleteEntityAsync<T>(T entity, CancellationToken cancellationToken = default) where T : BaseEntity
+    {
+        DbContext.Remove(entity); // Remove the given entity from the DbContext.
+        return await DbContext.SaveChangesAsync(cancellationToken); // Persist the change and return the number of rows affected.
+    }
+
+
 }

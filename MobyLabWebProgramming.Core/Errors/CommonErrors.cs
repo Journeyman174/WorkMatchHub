@@ -15,5 +15,10 @@ public static class CommonErrors
     public static ErrorMessage CompanyAlreadyExists => new(HttpStatusCode.Conflict, "Company already exists!", ErrorCodes.CompanyAlreadyExists);
     public static ErrorMessage Forbidden => new(HttpStatusCode.Forbidden, "You do not have permission to perform this action.", ErrorCodes.CannotAccess);
 
+    public static ErrorMessage JobAlreadySaved => new(HttpStatusCode.Conflict, "Job is already saved!", ErrorCodes.JobAlreadySaved);
+
+    public static ErrorMessage SavedJobNotFound => new ErrorMessage(HttpStatusCode.NotFound, "Saved job not found.", ErrorCodes.SavedJobNotFound);
+
+
 }
 

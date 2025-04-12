@@ -104,4 +104,17 @@ public interface IRepository<out TDb> where TDb : DbContext
     /// Deletes entities that satisfy the specifications.
     /// </summary>
     public Task<int> DeleteAsync<T>(ISpecification<T> spec, CancellationToken cancellationToken = default) where T : BaseEntity;
+
+
+    /// <summary>
+    /// Deletes a given entity instance directly from the database.
+    /// This is useful for entities with composite keys or when the entity instance is already retrieved.
+    /// </summary>
+    /// <param name="entity">The entity instance to be deleted.</param>
+    /// <param name="cancellationToken">Optional cancellation token to cancel the operation.</param>
+    /// <typeparam name="T">The entity type to delete.</typeparam>
+    /// <returns>The number of entities deleted (0 or 1).</returns>
+    public Task<int> DeleteEntityAsync<T>(T entity, CancellationToken cancellationToken = default) where T : BaseEntity;
+
+
 }

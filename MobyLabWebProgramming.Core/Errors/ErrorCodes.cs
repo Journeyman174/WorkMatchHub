@@ -22,5 +22,8 @@ public enum ErrorCodes
     // Coduri specifice
     CompanyNotFound,
     CompanyAlreadyExists,
-    CannotAccess
+    CannotAccess,
+    JobAlreadySaved,
+    SavedJobNotFound
+
 }

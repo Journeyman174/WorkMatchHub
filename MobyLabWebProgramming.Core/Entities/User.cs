@@ -23,4 +23,6 @@ public class User : BaseEntity
     // Relatii
     public ICollection<JobRequest> JobRequests { get; set; } = null!;
     public ICollection<JobOffer> JobOffers { get; set; } = null!;
+    public ICollection<SavedJob> SavedJobs { get; set; } = null!;
+
 }

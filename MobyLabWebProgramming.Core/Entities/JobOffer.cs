@@ -21,4 +21,6 @@ public class JobOffer : BaseEntity
     public User Recruiter { get; set; } = null!;
     public ICollection<JobAssignment> JobAssignments { get; set; } = null!;
     public ICollection<JobRequest> JobRequests { get; set; } = null!;
+    public ICollection<SavedJob> SavedByUsers { get; set; } = null!;
+
 }
