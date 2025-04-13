@@ -15,4 +15,7 @@ public class Company : BaseEntity
 
     // Relatia One-to-Many cu JobOffer
     public ICollection<JobOffer> JobOffers { get; set; } = null!;
+
+    public User User { get; set; } = null!;
+
 }

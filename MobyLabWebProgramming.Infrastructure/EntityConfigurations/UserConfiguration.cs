@@ -55,5 +55,11 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             .HasForeignKey(jo => jo.UserId)
             .OnDelete(DeleteBehavior.Restrict);
 
+        builder.HasOne(u => u.Company)
+            .WithOne(c => c.User)
+            .HasForeignKey<Company>(c => c.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+
     }
 }

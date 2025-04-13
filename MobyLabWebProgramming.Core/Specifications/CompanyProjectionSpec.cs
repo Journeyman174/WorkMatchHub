@@ -9,11 +9,22 @@ public sealed class CompanyProjectionSpec : Specification<Company, CompanyDTO>
 {
     public CompanyProjectionSpec(bool orderByCreatedAt = false)
     {
+        Query.Include(e => e.User);
+
         Query.Select(e => new CompanyDTO
         {
             Id = e.Id,
             Name = e.Name,
-            Description = e.Description
+            Description = e.Description,
+            Location = e.Location,
+            User = new UserDTO
+            {
+                Id = e.User.Id,
+                Name = e.User.Name,
+                Email = e.User.Email,
+                Role = e.User.Role
+            },
+            CreatedAt = e.CreatedAt
         });
 
         if (orderByCreatedAt)
