@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace MobyLabWebProgramming.Core.DataTransferObjects;
 
-namespace MobyLabWebProgramming.Core.DataTransferObjects
+public class JobRequestUpdateDTO
 {
-    public class JobRequestUpdateDTO
-    {
-        public string? CoverLetter { get; set; }
-    }
+    public string? CoverLetter { get; set; }
 }

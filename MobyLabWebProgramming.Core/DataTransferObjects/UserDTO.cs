@@ -12,4 +12,10 @@ public class UserDTO
     public string Name { get; set; } = null!;
     public string Email { get; set; } = null!;
     public UserRoleEnum Role { get; set; }
+
+    public bool IsVerified { get; set; }         
+    public string? FullName { get; set; }
+
+    public string? CompanyName { get; set; } // Afiseaza numele companiei daca este Recruiter
+
 }

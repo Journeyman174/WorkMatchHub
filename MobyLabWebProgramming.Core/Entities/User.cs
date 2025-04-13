@@ -15,7 +15,8 @@ public class User : BaseEntity
 
     public Company? Company { get; set; }
 
-
+    public bool IsVerified { get; set; } = false; 
+    public string? FullName { get; set; }         
 
     /// <summary>
     /// References to other entities such as this are used to automatically fetch correlated data, this is called a navigation property.

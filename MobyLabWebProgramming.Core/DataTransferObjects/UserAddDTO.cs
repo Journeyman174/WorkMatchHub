@@ -11,4 +11,7 @@ public class UserAddDTO
     public string Email { get; set; } = null!;
     public string Password { get; set; } = null!;
     public UserRoleEnum Role { get; set; }
+
+    public bool IsVerified { get; set; } = false; 
+    public string? FullName { get; set; }        
 }

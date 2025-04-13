@@ -37,32 +37,33 @@ public class UserService(IRepository<WebAppDatabaseContext> repository, ILoginSe
 
     public async Task<ServiceResponse<LoginResponseDTO>> Login(LoginDTO login, CancellationToken cancellationToken = default)
     {
-        var result = await repository.GetAsync(new UserSpec(login.Email), cancellationToken);
+        var entity = await repository.GetAsync(new UserSpec(login.Email), cancellationToken); // Obtine entitatea bruta pentru verificare.
 
-        if (result == null) // Verify if the user is found in the database.
+        if (entity == null) // Verifica daca utilizatorul exista in baza de date.
         {
-            return ServiceResponse.FromError<LoginResponseDTO>(CommonErrors.UserNotFound); // Pack the proper error as the response.
+            return ServiceResponse.FromError<LoginResponseDTO>(CommonErrors.UserNotFound); // Trimite eroare de utilizator inexistent.
         }
 
-        if (result.Password != login.Password) // Verify if the password hash of the request is the same as the one in the database.
+        if (entity.Password != login.Password) // Verifica parola (hash-ul deja trebuie sa fie aplicat).
         {
             return ServiceResponse.FromError<LoginResponseDTO>(new(HttpStatusCode.BadRequest, "Wrong password!", ErrorCodes.WrongPassword));
         }
 
-        var user = new UserDTO
+        var user = await repository.GetAsync(new UserProjectionSpec(entity.Id), cancellationToken); // Obtine un DTO sigur si complet.
+
+        if (user == null)
         {
-            Id = result.Id,
-            Email = result.Email,
-            Name = result.Name,
-            Role = result.Role
-        };
+            return ServiceResponse.FromError<LoginResponseDTO>(CommonErrors.UserNotFound); 
+        }
 
         return ServiceResponse.ForSuccess(new LoginResponseDTO
         {
             User = user,
-            Token = loginService.GetToken(user, DateTime.UtcNow, new(7, 0, 0, 0)) // Get a JWT for the user issued now and that expires in 7 days.
+            Token = loginService.GetToken(user, DateTime.UtcNow, new TimeSpan(7, 0, 0, 0))
         });
     }
+
+
 
     public async Task<ServiceResponse<int>> GetUserCount(CancellationToken cancellationToken = default) => 
         ServiceResponse.ForSuccess(await repository.GetCountAsync<User>(cancellationToken)); // Get the count of all user entities in the database.
@@ -86,7 +87,9 @@ public class UserService(IRepository<WebAppDatabaseContext> repository, ILoginSe
             Email = user.Email,
             Name = user.Name,
             Role = user.Role,
-            Password = user.Password
+            Password = user.Password,
+            IsVerified = user.Role is UserRoleEnum.Admin or UserRoleEnum.Recruiter,
+            FullName = user.FullName
         }, cancellationToken); // A new entity is created and persisted in the database.
 
         await mailService.SendMail(user.Email, "Welcome!", MailTemplates.UserAddTemplate(user.Name), true, "My App", cancellationToken); // You can send a notification on the user email. Change the email if you want.

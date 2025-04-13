@@ -21,7 +21,14 @@ public static class CommonErrors
 
     public static ErrorMessage JobOfferNotFound => new(HttpStatusCode.NotFound, "Job offer not found.", ErrorCodes.JobOfferNotFound);
 
+    public static ErrorMessage RecruiterCompanyExists => new(HttpStatusCode.Conflict, "Recruiter already owns a company!", ErrorCodes.RecruiterCompanyExists);
+
+    public static ErrorMessage JobRequestNotFound => new(HttpStatusCode.NotFound, "Job request not found.", ErrorCodes.JobRequestNotFound);
+
     
+
+
+
 
 
 }

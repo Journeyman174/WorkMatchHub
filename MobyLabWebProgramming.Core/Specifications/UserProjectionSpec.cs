@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using MobyLabWebProgramming.Core.DataTransferObjects;
 using MobyLabWebProgramming.Core.Entities;
+using MobyLabWebProgramming.Core.Enums;
 
 namespace MobyLabWebProgramming.Core.Specifications;
 
@@ -15,15 +16,29 @@ public sealed class UserProjectionSpec : Specification<User, UserDTO>
     /// <summary>
     /// In this constructor is the projection/mapping expression used to get UserDTO object directly from the database.
     /// </summary>
-    public UserProjectionSpec(bool orderByCreatedAt = false) =>
-        Query.Select(e => new()
+    public UserProjectionSpec(bool orderByCreatedAt = false)
+    {
+        Query
+            .Include(e => e.Company);
+
+        Query
+            .Select(e => new UserDTO
+            {
+                Id = e.Id,
+                Email = e.Email,
+                Name = e.Name,
+                Role = e.Role,
+                FullName = e.FullName,
+                IsVerified = e.IsVerified,
+                CompanyName = e.Role == UserRoleEnum.Recruiter && e.Company != null ? e.Company.Name : null
+
+            });
+
+        if (orderByCreatedAt)
         {
-            Id = e.Id,
-            Email = e.Email,
-            Name = e.Name,
-            Role = e.Role
-        })
-        .OrderByDescending(x => x.CreatedAt, orderByCreatedAt);
+            Query.OrderByDescending(x => x.CreatedAt);
+        }
+    }
 
     public UserProjectionSpec(Guid id) : this() => Query.Where(e => e.Id == id); // This constructor will call the first declared constructor with the default parameter. 
 
@@ -41,4 +56,5 @@ public sealed class UserProjectionSpec : Specification<User, UserDTO>
         Query.Where(e => EF.Functions.ILike(e.Name, searchExpr)); // This is an example on how database specific expressions can be used via C# expressions.
                                                                                           // Note that this will be translated to the database something like "where user.Name ilike '%str%'".
     }
+
 }

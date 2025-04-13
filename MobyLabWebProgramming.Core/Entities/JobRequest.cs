@@ -1,21 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MobyLabWebProgramming.Core.Entities;
 
 namespace MobyLabWebProgramming.Core.Entities;
 
 public class JobRequest : BaseEntity
 {
     public Guid JobOfferId { get; set; }
-    public Guid JobSeekerId { get; set; }
-    public string CoverLetter { get; set; } = null!;
+    public Guid UserId { get; set; } 
 
-    public Guid UserId { get; set; }
+    public string CoverLetter { get; set; } = null!;
 
     // Relatii
     public JobOffer JobOffer { get; set; } = null!;
-    public User JobSeeker { get; set; } = null!;
+    public User User { get; set; } = null!; // Legam userul prin UserId
     public JobAssignment JobAssignment { get; set; } = null!;
 }

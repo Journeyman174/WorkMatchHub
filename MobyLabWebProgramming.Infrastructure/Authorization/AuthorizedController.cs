@@ -31,7 +31,31 @@ public abstract class AuthorizedController(IUserService userService) : BaseRespo
         var email = enumerable.Where(x => x.Type == ClaimTypes.Email).Select(x => x.Value).FirstOrDefault();
         var name = enumerable.Where(x => x.Type == ClaimTypes.Name).Select(x => x.Value).FirstOrDefault();
 
-        _userClaims = new(userId, name, email);
+        // Claims suplimentare
+        var role = enumerable
+            .Where(x => x.Type == "UserRole")
+            .Select(x => x.Value)
+            .FirstOrDefault();
+
+        var companyName = enumerable
+            .Where(x => x.Type == "CompanyName")
+            .Select(x => x.Value)
+            .FirstOrDefault();
+
+
+        var isVerified = enumerable
+            .Where(x => x.Type == "IsVerified")
+            .Select(x => bool.TryParse(x.Value, out var val) && val)
+            .FirstOrDefault();
+
+        var fullName = enumerable
+            .Where(x => x.Type == "FullName")
+            .Select(x => x.Value)
+            .FirstOrDefault();
+
+        _userClaims = new(userId, name, email, role, isVerified, fullName, companyName);
+
+
 
         return _userClaims;
     }

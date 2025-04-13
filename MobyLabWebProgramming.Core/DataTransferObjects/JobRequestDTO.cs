@@ -1,18 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MobyLabWebProgramming.Core.DataTransferObjects;
+using System;
 
-namespace MobyLabWebProgramming.Core.DataTransferObjects
+namespace MobyLabWebProgramming.Core.DataTransferObjects;
+
+public class JobRequestDTO
 {
-    public class JobRequestDTO
-    {
-        public Guid Id { get; set; }
-        public JobOfferDTO JobOffer { get; set; } = null!;
-        public UserDTO JobSeeker { get; set; } = null!;
-        public string CoverLetter { get; set; } = null!;
-        public UserDTO User { get; set; } = null!;
-        public DateTime CreatedAt { get; set; }
-    }
+    public Guid Id { get; set; }
+    public JobOfferDTO JobOffer { get; set; } = null!;
+    public UserDTO User { get; set; } = null!; 
+    public string CoverLetter { get; set; } = null!;
+    public DateTime CreatedAt { get; set; }
 }

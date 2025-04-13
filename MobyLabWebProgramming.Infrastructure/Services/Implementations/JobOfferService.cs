@@ -39,6 +39,11 @@ public class JobOfferService(IRepository<WebAppDatabaseContext> repository) : IJ
             return ServiceResponse.FromError(CommonErrors.CompanyNotFound);
         }
 
+        if (requestingUser.Role == UserRoleEnum.Recruiter && company.UserId != requestingUser.Id)
+        {
+            return ServiceResponse.FromError(CommonErrors.Forbidden);
+        }
+
         await repository.AddAsync(new JobOffer
         {
             Title = jobOffer.Title,
@@ -50,6 +55,7 @@ public class JobOfferService(IRepository<WebAppDatabaseContext> repository) : IJ
 
         return ServiceResponse.ForSuccess();
     }
+
 
     public async Task<ServiceResponse> UpdateJobOffer(Guid id, JobOfferUpdateDTO jobOffer, UserDTO requestingUser, CancellationToken cancellationToken = default)
     {
@@ -64,6 +70,11 @@ public class JobOfferService(IRepository<WebAppDatabaseContext> repository) : IJ
             return ServiceResponse.FromError(CommonErrors.JobOfferNotFound);
         }
 
+        if (requestingUser.Role == UserRoleEnum.Recruiter && entity.UserId != requestingUser.Id)
+        {
+            return ServiceResponse.FromError(CommonErrors.Forbidden);
+        }
+
         entity.Title = jobOffer.Title ?? entity.Title;
         entity.Description = jobOffer.Description ?? entity.Description;
         entity.Salary = jobOffer.Salary ?? entity.Salary;
@@ -71,6 +82,7 @@ public class JobOfferService(IRepository<WebAppDatabaseContext> repository) : IJ
         await repository.UpdateAsync(entity, cancellationToken);
         return ServiceResponse.ForSuccess();
     }
+
 
     public async Task<ServiceResponse> DeleteJobOffer(Guid id, UserDTO requestingUser, CancellationToken cancellationToken = default)
     {
@@ -85,7 +97,13 @@ public class JobOfferService(IRepository<WebAppDatabaseContext> repository) : IJ
             return ServiceResponse.FromError(CommonErrors.JobOfferNotFound);
         }
 
+        if (requestingUser.Role == UserRoleEnum.Recruiter && entity.UserId != requestingUser.Id)
+        {
+            return ServiceResponse.FromError(CommonErrors.Forbidden);
+        }
+
         await repository.DeleteAsync<JobOffer>(id, cancellationToken);
         return ServiceResponse.ForSuccess();
     }
+
 }

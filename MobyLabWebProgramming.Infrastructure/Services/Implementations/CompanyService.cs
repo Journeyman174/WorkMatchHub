@@ -34,10 +34,20 @@ public class CompanyService(IRepository<WebAppDatabaseContext> repository) : ICo
             return ServiceResponse.FromError(CommonErrors.Forbidden);
         }
 
-        var existingCompany = await repository.GetAsync(new CompanySpec(company.Name), cancellationToken);
-        if (existingCompany != null)
+        var existingCompanyByName = await repository.GetAsync(new CompanySpec(company.Name), cancellationToken);
+        if (existingCompanyByName != null)
         {
             return ServiceResponse.FromError(CommonErrors.CompanyAlreadyExists);
+        }
+
+        // Daca este recruiter, verificam daca are deja o companie asociata
+        if (requestingUser.Role == UserRoleEnum.Recruiter)
+        {
+            var recruiterCompany = await repository.GetAsync(new CompanySpec(requestingUser.Id), cancellationToken);
+            if (recruiterCompany != null)
+            {
+                return ServiceResponse.FromError(CommonErrors.RecruiterCompanyExists);
+            }
         }
 
         await repository.AddAsync(new Company
@@ -50,6 +60,7 @@ public class CompanyService(IRepository<WebAppDatabaseContext> repository) : ICo
 
         return ServiceResponse.ForSuccess();
     }
+
 
     public async Task<ServiceResponse> UpdateCompany(Guid id, CompanyUpdateDTO company, UserDTO requestingUser, CancellationToken cancellationToken = default)
     {
@@ -64,6 +75,11 @@ public class CompanyService(IRepository<WebAppDatabaseContext> repository) : ICo
             return ServiceResponse.FromError(CommonErrors.CompanyNotFound);
         }
 
+        if (requestingUser.Role == UserRoleEnum.Recruiter && entity.UserId != requestingUser.Id)
+        {
+            return ServiceResponse.FromError(CommonErrors.Forbidden); // Recruiterul incearca sa modifice o companie care nu ii apartine
+        }
+
         entity.Name = company.Name ?? entity.Name;
         entity.Description = company.Description ?? entity.Description;
         entity.Location = company.Location ?? entity.Location;
@@ -71,6 +87,7 @@ public class CompanyService(IRepository<WebAppDatabaseContext> repository) : ICo
         await repository.UpdateAsync(entity, cancellationToken);
         return ServiceResponse.ForSuccess();
     }
+
 
     public async Task<ServiceResponse> DeleteCompany(Guid id, UserDTO requestingUser, CancellationToken cancellationToken = default)
     {
@@ -85,7 +102,13 @@ public class CompanyService(IRepository<WebAppDatabaseContext> repository) : ICo
             return ServiceResponse.FromError(CommonErrors.CompanyNotFound);
         }
 
+        if (requestingUser.Role == UserRoleEnum.Recruiter && entity.UserId != requestingUser.Id)
+        {
+            return ServiceResponse.FromError(CommonErrors.Forbidden); // Recruiterul incearca sa stearga o companie care nu ii apartine
+        }
+
         await repository.DeleteAsync<Company>(id, cancellationToken);
         return ServiceResponse.ForSuccess();
     }
+
 }

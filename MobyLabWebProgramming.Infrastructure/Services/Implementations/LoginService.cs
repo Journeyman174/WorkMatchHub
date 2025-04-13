@@ -15,7 +15,7 @@ namespace MobyLabWebProgramming.Infrastructure.Services.Implementations;
 public class LoginService(IOptions<JwtConfiguration> jwtConfiguration) : ILoginService
 {
     private readonly JwtConfiguration _jwtConfiguration = jwtConfiguration.Value;
-    
+
     public string GetToken(UserDTO user, DateTime issuedAt, TimeSpan expiresIn)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
@@ -34,6 +34,24 @@ public class LoginService(IOptions<JwtConfiguration> jwtConfiguration) : ILoginS
             Audience = _jwtConfiguration.Audience, // This sets the "aud" claim to indicate to which client the JWT is intended to.
             SigningCredentials = new(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature) // Sign the JWT, it will set the algorithm in the JWT header to "HS256" for HMAC with SHA256.
         };
+
+        // ▶ Claims suplimentare (adăugare fără a modifica structura existentă)
+        if (tokenDescriptor.Claims is not null)
+        {
+            tokenDescriptor.Claims["UserRole"] = user.Role.ToString();
+
+            if (!string.IsNullOrWhiteSpace(user.CompanyName))
+            {
+                tokenDescriptor.Claims["CompanyName"] = user.CompanyName;
+            }
+
+            tokenDescriptor.Claims["IsVerified"] = user.IsVerified.ToString().ToLower();
+
+            if (!string.IsNullOrWhiteSpace(user.FullName))
+            {
+                tokenDescriptor.Claims["FullName"] = user.FullName;
+            }
+        }
 
         return tokenHandler.WriteToken(tokenHandler.CreateToken(tokenDescriptor)); // Create the token.
     }

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MobyLabWebProgramming.Infrastructure.Database;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MobyLabWebProgramming.Infrastructure.Migrations
 {
     [DbContext(typeof(WebAppDatabaseContext))]
-    partial class WebAppDatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20250413030944_Entity-UserMigration")]
+    partial class EntityUserMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -152,6 +155,9 @@ namespace MobyLabWebProgramming.Infrastructure.Migrations
                     b.Property<Guid>("JobOfferId")
                         .HasColumnType("uuid");
 
+                    b.Property<Guid>("JobSeekerId")
+                        .HasColumnType("uuid");
+
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp without time zone");
 
@@ -161,6 +167,8 @@ namespace MobyLabWebProgramming.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("JobOfferId");
+
+                    b.HasIndex("JobSeekerId");
 
                     b.HasIndex("UserId");
 
@@ -338,15 +346,21 @@ namespace MobyLabWebProgramming.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("MobyLabWebProgramming.Core.Entities.User", "User")
+                    b.HasOne("MobyLabWebProgramming.Core.Entities.User", "JobSeeker")
                         .WithMany("JobRequests")
+                        .HasForeignKey("JobSeekerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("MobyLabWebProgramming.Core.Entities.User", null)
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("JobOffer");
 
-                    b.Navigation("User");
+                    b.Navigation("JobSeeker");
                 });
 
             modelBuilder.Entity("MobyLabWebProgramming.Core.Entities.SavedJob", b =>

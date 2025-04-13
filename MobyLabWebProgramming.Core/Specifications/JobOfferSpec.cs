@@ -21,4 +21,16 @@ public sealed class JobOfferSpec : Specification<JobOffer>
     {
         Query.Where(offer => offer.Title == title);
     }
+
+    public JobOfferSpec(Guid recruiterId, bool isByRecruiter)
+    {
+        Query
+            .Where(offer => offer.UserId == recruiterId)
+            .Include(offer => offer.Company)
+                .ThenInclude(company => company.User)
+            .Include(offer => offer.User);
+    }
+
+
+
 }

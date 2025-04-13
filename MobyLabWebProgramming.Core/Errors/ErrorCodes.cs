@@ -25,6 +25,8 @@ public enum ErrorCodes
     CannotAccess,
     JobAlreadySaved,
     SavedJobNotFound,
-    JobOfferNotFound
+    JobOfferNotFound,
+    RecruiterCompanyExists,
+    JobRequestNotFound
 
 }

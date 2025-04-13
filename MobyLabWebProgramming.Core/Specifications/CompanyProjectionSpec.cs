@@ -43,4 +43,10 @@ public sealed class CompanyProjectionSpec : Specification<Company, CompanyDTO>
             Query.Where(e => EF.Functions.ILike(e.Name, searchExpr));
         }
     }
+
+    public CompanyProjectionSpec(Guid userId, bool isByUser) : this()
+    {
+        Query.Where(e => e.User.Id == userId);
+    }
+
 }

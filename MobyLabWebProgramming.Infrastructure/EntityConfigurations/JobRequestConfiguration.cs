@@ -1,13 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using MobyLabWebProgramming.Core.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MobyLabWebProgramming.Infrastructure.Database.EntityConfigurations;
 
 public class JobRequestConfiguration : IEntityTypeConfiguration<JobRequest>
 {
@@ -25,13 +18,8 @@ public class JobRequestConfiguration : IEntityTypeConfiguration<JobRequest>
             .HasForeignKey(jr => jr.JobOfferId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        builder.HasOne(jr => jr.JobSeeker)
+        builder.HasOne(jr => jr.User)
             .WithMany(u => u.JobRequests)
-            .HasForeignKey(jr => jr.JobSeekerId)
-            .OnDelete(DeleteBehavior.Restrict);
-
-        builder.HasOne<User>()
-            .WithMany()
             .HasForeignKey(jr => jr.UserId)
             .OnDelete(DeleteBehavior.Restrict);
 
