@@ -13,12 +13,12 @@ public sealed class JobOfferSpec : Specification<JobOffer>
         Query
             .Where(offer => offer.Id == id)
             .Include(offer => offer.Company)
+                .ThenInclude(company => company.User)
             .Include(offer => offer.User);
     }
 
     public JobOfferSpec(string title)
     {
-        Query
-            .Where(offer => offer.Title == title);
+        Query.Where(offer => offer.Title == title);
     }
 }
