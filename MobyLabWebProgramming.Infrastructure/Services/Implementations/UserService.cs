@@ -88,7 +88,9 @@ public class UserService(IRepository<WebAppDatabaseContext> repository, ILoginSe
             Name = user.Name,
             Role = user.Role,
             Password = user.Password,
-            IsVerified = user.Role is UserRoleEnum.Admin or UserRoleEnum.Recruiter,
+            IsVerified = requestingUser?.Role == UserRoleEnum.Admin
+                ? user.IsVerified
+                : user.Role is UserRoleEnum.Admin or UserRoleEnum.Recruiter,
             FullName = user.FullName
         }, cancellationToken); // A new entity is created and persisted in the database.
 
@@ -128,4 +130,24 @@ public class UserService(IRepository<WebAppDatabaseContext> repository, ILoginSe
 
         return ServiceResponse.ForSuccess();
     }
+
+    public async Task<ServiceResponse> VerifyUser(Guid userId, UserDTO requestingUser, CancellationToken cancellationToken = default)
+    {
+        if (requestingUser.Role != UserRoleEnum.Admin)
+        {
+            return ServiceResponse.FromError(CommonErrors.OnlyAdmin);
+        }
+
+        var user = await repository.GetAsync(new UserSpec(userId), cancellationToken);
+        if (user == null)
+        {
+            return ServiceResponse.FromError(CommonErrors.UserNotFound);
+        }
+
+        user.IsVerified = true;
+        await repository.UpdateAsync(user, cancellationToken);
+
+        return ServiceResponse.ForSuccess();
+    }
+
 }

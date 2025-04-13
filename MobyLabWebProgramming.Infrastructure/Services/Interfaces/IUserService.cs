@@ -41,4 +41,7 @@ public interface IUserService
     /// If the requesting user is null then no verification is performed as it indicates that the application.
     /// </summary>
     public Task<ServiceResponse> DeleteUser(Guid id, UserDTO? requestingUser = null, CancellationToken cancellationToken = default);
+
+    Task<ServiceResponse> VerifyUser(Guid userId, UserDTO requestingUser, CancellationToken cancellationToken = default);
+
 }

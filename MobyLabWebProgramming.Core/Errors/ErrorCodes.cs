@@ -27,6 +27,7 @@ public enum ErrorCodes
     SavedJobNotFound,
     JobOfferNotFound,
     RecruiterCompanyExists,
-    JobRequestNotFound
+    JobRequestNotFound,
+    OnlyAdmin
 
 }

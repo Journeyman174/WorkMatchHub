@@ -93,4 +93,16 @@ public class UserController(IUserService userService) : AuthorizedController(use
             FromServiceResponse(await UserService.DeleteUser(id)) :
             ErrorMessageResult(currentUser.Error);
     }
+
+    [Authorize]
+    [HttpPost("{id:guid}")]
+    public async Task<ActionResult<RequestResponse>> VerifyUser([FromRoute] Guid id)
+    {
+        var currentUser = await GetCurrentUser();
+
+        return currentUser.Result != null
+            ? FromServiceResponse(await UserService.VerifyUser(id, currentUser.Result))
+            : ErrorMessageResult(currentUser.Error);
+    }
+
 }

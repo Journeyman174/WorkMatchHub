@@ -25,6 +25,9 @@ public static class CommonErrors
 
     public static ErrorMessage JobRequestNotFound => new(HttpStatusCode.NotFound, "Job request not found.", ErrorCodes.JobRequestNotFound);
 
+    public static ErrorMessage OnlyAdmin => new(HttpStatusCode.Forbidden, "Only Admins can verify users!", ErrorCodes.OnlyAdmin);
+
+
     
 
 
