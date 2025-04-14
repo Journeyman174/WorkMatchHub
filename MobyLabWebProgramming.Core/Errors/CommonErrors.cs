@@ -27,8 +27,12 @@ public static class CommonErrors
 
     public static ErrorMessage OnlyAdmin => new(HttpStatusCode.Forbidden, "Only Admins can verify users!", ErrorCodes.OnlyAdmin);
 
+    public static ErrorMessage JobAssignmentAlreadyExists => new(HttpStatusCode.Conflict, "Job Assignment already exists!", ErrorCodes.JobAssignmentAlreadyExists);
 
-    
+    public static ErrorMessage JobAssignmentNotFound => new(HttpStatusCode.NotFound, "Job assignment not found.", ErrorCodes.JobAssignmentNotFound);
+
+
+
 
 
 

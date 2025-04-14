@@ -23,7 +23,7 @@ public class SavedJobService(IRepository<WebAppDatabaseContext> repository) : IS
 
     public async Task<ServiceResponse> AddSavedJob(SavedJobAddDTO savedJob, UserDTO requestingUser, CancellationToken cancellationToken = default)
     {
-        var existing = await repository.GetAsync(new SavedJobSpec(requestingUser.Id, savedJob.JobOffer.Id), cancellationToken);
+        var existing = await repository.GetAsync(new SavedJobSpec(requestingUser.Id, savedJob.JobOfferId), cancellationToken);
 
         if (existing != null)
         {
@@ -33,8 +33,11 @@ public class SavedJobService(IRepository<WebAppDatabaseContext> repository) : IS
         await repository.AddAsync(new SavedJob
         {
             UserId = requestingUser.Id,
-            JobOfferId = savedJob.JobOffer.Id
+            JobOfferId = savedJob.JobOfferId, 
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow
         }, cancellationToken);
+
 
         return ServiceResponse.ForSuccess();
     }

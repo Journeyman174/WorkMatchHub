@@ -190,6 +190,7 @@ public static class WebApplicationBuilderExtensions
             .AddScoped<ISavedJobService, SavedJobService>()
             .AddScoped<IJobOfferService, JobOfferService>()
             .AddScoped<IJobRequestService, JobRequestService>()
+            .AddScoped<IJobAssignmentService, JobAssignmentService>()
 
             .AddScoped<IMailService, MailService>();
 

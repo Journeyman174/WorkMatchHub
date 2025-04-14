@@ -2,6 +2,6 @@
 {
     public class SavedJobAddDTO
     {
-        public JobOfferDTO JobOffer { get; set; } = null!;
+        public Guid JobOfferId { get; set; }
     }
 }

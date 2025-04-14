@@ -28,6 +28,9 @@ public enum ErrorCodes
     JobOfferNotFound,
     RecruiterCompanyExists,
     JobRequestNotFound,
-    OnlyAdmin
+    OnlyAdmin,
+    JobAssignmentAlreadyExists,
+    JobAssignmentNotFound
+
 
 }
