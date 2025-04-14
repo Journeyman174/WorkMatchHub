@@ -35,7 +35,8 @@ public class LoginService(IOptions<JwtConfiguration> jwtConfiguration) : ILoginS
             SigningCredentials = new(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature) // Sign the JWT, it will set the algorithm in the JWT header to "HS256" for HMAC with SHA256.
         };
 
-        // ▶ Claims suplimentare (adăugare fără a modifica structura existentă)
+        // Add extra claims to the token without altering the existing structure.
+
         if (tokenDescriptor.Claims is not null)
         {
             tokenDescriptor.Claims["UserRole"] = user.Role.ToString();

@@ -19,7 +19,7 @@ public sealed class UserProjectionSpec : Specification<User, UserDTO>
     public UserProjectionSpec(bool orderByCreatedAt = false)
     {
         Query
-            .Include(e => e.Company);
+            .Include(e => e.Company); // Include compania doar daca utilizatorul este recruiter
 
         Query
             .Select(e => new UserDTO
@@ -30,7 +30,7 @@ public sealed class UserProjectionSpec : Specification<User, UserDTO>
                 Role = e.Role,
                 FullName = e.FullName,
                 IsVerified = e.IsVerified,
-                CompanyName = e.Role == UserRoleEnum.Recruiter && e.Company != null ? e.Company.Name : null
+                CompanyName = e.Role == UserRoleEnum.Recruiter && e.Company != null ? e.Company.Name : "" // Afiseaza numele companiei doar pentru recruterii care au o companie asociata
 
             });
 
@@ -54,7 +54,6 @@ public sealed class UserProjectionSpec : Specification<User, UserDTO>
         var searchExpr = $"%{search.Replace(" ", "%")}%";
 
         Query.Where(e => EF.Functions.ILike(e.Name, searchExpr)); // This is an example on how database specific expressions can be used via C# expressions.
-                                                                                          // Note that this will be translated to the database something like "where user.Name ilike '%str%'".
+        // Note that this will be translated to the database something like "where user.Name ilike '%str%'".
     }
-
 }

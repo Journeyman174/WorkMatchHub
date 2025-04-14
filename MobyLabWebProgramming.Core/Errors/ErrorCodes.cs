@@ -30,7 +30,14 @@ public enum ErrorCodes
     JobRequestNotFound,
     OnlyAdmin,
     JobAssignmentAlreadyExists,
-    JobAssignmentNotFound
+    JobAssignmentNotFound,
+    CannotSaveOwnJob,
+    InvalidId,
+    InvalidCompanyData,
+    InvalidJobAssignmentData,
+    InvalidJobOfferData,
+    JobRequestAlreadyExists,
+    InvalidJobRequestData
 
 
 }

@@ -31,6 +31,25 @@ public static class CommonErrors
 
     public static ErrorMessage JobAssignmentNotFound => new(HttpStatusCode.NotFound, "Job assignment not found.", ErrorCodes.JobAssignmentNotFound);
 
+    public static ErrorMessage CannotSaveOwnJob => new(HttpStatusCode.Forbidden, "You cannot save your own job offer.", ErrorCodes.CannotSaveOwnJob);
+
+    public static ErrorMessage InvalidId => new(HttpStatusCode.BadRequest, "The provided ID is invalid.", ErrorCodes.InvalidId);
+
+    public static ErrorMessage InvalidCompanyData => new(HttpStatusCode.BadRequest, "The provided company data is not valid.", ErrorCodes.InvalidCompanyData);
+
+    public static ErrorMessage InvalidJobAssignmentData => new(HttpStatusCode.BadRequest, "Invalid job assignment data provided.", ErrorCodes.InvalidJobAssignmentData);
+
+    public static ErrorMessage InvalidJobOfferData => new(HttpStatusCode.BadRequest, "Invalid job offer data provided.", ErrorCodes.InvalidJobOfferData);
+
+    public static ErrorMessage JobRequestAlreadyExists => new(HttpStatusCode.Conflict, "Job request already exists!", ErrorCodes.JobRequestAlreadyExists);
+
+    public static ErrorMessage InvalidJobRequestData => new(HttpStatusCode.BadRequest, "Invalid job request data.", ErrorCodes.InvalidJobRequestData);
+
+
+
+
+
+
 
 
 

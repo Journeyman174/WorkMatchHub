@@ -7,12 +7,15 @@ namespace MobyLabWebProgramming.Core.Specifications;
 
 public sealed class JobOfferProjectionSpec : Specification<JobOffer, JobOfferDTO>
 {
+    // Constructor ce permite ordonarea optionala dupa data crearii
     public JobOfferProjectionSpec(bool orderByCreatedAt = false)
     {
+        // Include entitatile legate pentru companie si recruiter
         Query.Include(e => e.Company)
              .ThenInclude(c => c.User); // Include utilizatorul asociat companiei
         Query.Include(e => e.User); // Include recruiterul
 
+        // Selecteaza datele in JobOfferDTO si maparea inlantuita
         Query.Select(e => new JobOfferDTO
         {
             Id = e.Id,
@@ -34,7 +37,6 @@ public sealed class JobOfferProjectionSpec : Specification<JobOffer, JobOfferDTO
                     IsVerified = e.Company.User.IsVerified,
                     FullName = e.Company.User.FullName,
                     CompanyName = e.Company.User.Company != null ? e.Company.User.Company.Name : ""
-
                 },
                 CreatedAt = e.Company.CreatedAt
             },
@@ -47,26 +49,27 @@ public sealed class JobOfferProjectionSpec : Specification<JobOffer, JobOfferDTO
                 IsVerified = e.User.IsVerified,
                 FullName = e.User.FullName,
                 CompanyName = e.User.Company != null ? e.User.Company.Name : ""
-
             },
             CreatedAt = e.CreatedAt
         });
 
         if (orderByCreatedAt)
         {
-            Query.OrderByDescending(e => e.CreatedAt);
+            Query.OrderByDescending(e => e.CreatedAt); // Ordonare descrescatoare dupa data crearii
         }
     }
 
+    // Constructor pentru cautare dupa ID
     public JobOfferProjectionSpec(Guid id) : this() =>
         Query.Where(e => e.Id == id);
 
+    // Constructor pentru cautare cu filtrare dupa titlu (search)
     public JobOfferProjectionSpec(string? search) : this(true)
     {
         if (!string.IsNullOrWhiteSpace(search))
         {
             var searchExpr = $"%{search.Trim().Replace(" ", "%")}%";
-            Query.Where(e => EF.Functions.ILike(e.Title, searchExpr));
+            Query.Where(e => EF.Functions.ILike(e.Title, searchExpr)); // Cautare partiala si case-insensitive
         }
     }
 }

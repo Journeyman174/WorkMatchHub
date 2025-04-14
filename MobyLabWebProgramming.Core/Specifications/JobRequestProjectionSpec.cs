@@ -6,8 +6,10 @@ using MobyLabWebProgramming.Core.Enums;
 
 namespace MobyLabWebProgramming.Core.Specifications;
 
+// Specificatii pentru maparea entitatii JobRequest catre DTO-ul JobRequestDTO
 public sealed class JobRequestProjectionSpec : Specification<JobRequest, JobRequestDTO>
 {
+    // Constructor care include relatiile si optional ordoneaza dupa data crearii
     public JobRequestProjectionSpec(bool orderByCreatedAt = false)
     {
         Query
@@ -47,7 +49,7 @@ public sealed class JobRequestProjectionSpec : Specification<JobRequest, JobRequ
                         Role = jr.JobOffer.Company.User.Role,
                         FullName = jr.JobOffer.Company.User.FullName,
                         IsVerified = jr.JobOffer.Company.User.IsVerified,
-                        CompanyName = jr.JobOffer.Company.User.Company!.Name
+                        CompanyName = jr.JobOffer.Company.User.Company != null ? jr.JobOffer.Company.User.Company.Name : ""
                     }
                 },
 
@@ -59,7 +61,7 @@ public sealed class JobRequestProjectionSpec : Specification<JobRequest, JobRequ
                     Role = jr.JobOffer.User.Role,
                     FullName = jr.JobOffer.User.FullName,
                     IsVerified = jr.JobOffer.User.IsVerified,
-                    CompanyName = jr.JobOffer.User.Company!.Name
+                    CompanyName = jr.JobOffer.User.Company != null ? jr.JobOffer.User.Company.Name : ""
                 }
             },
 
@@ -81,11 +83,13 @@ public sealed class JobRequestProjectionSpec : Specification<JobRequest, JobRequ
         }
     }
 
+    // Constructor pentru cautare dupa ID-ul cererii
     public JobRequestProjectionSpec(Guid id) : this()
     {
         Query.Where(jr => jr.Id == id);
     }
 
+    // Constructor pentru cautare dupa keyword si filtrare in functie de rolul utilizatorului
     public JobRequestProjectionSpec(string? search, Guid userId, UserRoleEnum role) : this(true)
     {
         if (!string.IsNullOrWhiteSpace(search))
