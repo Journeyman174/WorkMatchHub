@@ -8,11 +8,18 @@ using MobyLabWebProgramming.Infrastructure.Services.Interfaces;
 
 namespace MobyLabWebProgramming.Backend.Controllers;
 
+/// <summary>
+/// Controller pentru gestionarea atribuirilor de job. 
+/// Oferă functionalitati pentru adaugarea, stergerea si vizualizarea atribuirilor de catre recruiter sau admin.
+/// </summary>
 [ApiController]
 [Route("api/[controller]/[action]")]
 public class JobAssignmentController(IJobAssignmentService jobAssignmentService, IUserService userService)
     : AuthorizedController(userService)
 {
+    /// <summary>
+    /// Returneaza o atribuire de job specifica dupa Id-ul atribuirii.
+    /// </summary>
     [Authorize]
     [HttpGet("{id:guid}")]
     public async Task<ActionResult<RequestResponse<JobAssignmentDTO>>> GetById([FromRoute] Guid id, CancellationToken cancellationToken)
@@ -20,7 +27,9 @@ public class JobAssignmentController(IJobAssignmentService jobAssignmentService,
         return FromServiceResponse(await jobAssignmentService.GetById(id, cancellationToken));
     }
 
-
+    /// <summary>
+    /// Adauga o atribuire de job pentru un utilizator de catre un recruiter. Doar recruiterii pot efectua aceasta actiune.
+    /// </summary>
     [Authorize]
     [HttpPost]
     public async Task<ActionResult<RequestResponse<JobAssignmentDTO>>> Add([FromBody] JobAssignmentAddDTO assignment, CancellationToken cancellationToken)
@@ -31,7 +40,9 @@ public class JobAssignmentController(IJobAssignmentService jobAssignmentService,
             : ErrorMessageResult<JobAssignmentDTO>(currentUser.Error);
     }
 
-
+    /// <summary>
+    /// Sterge o atribuire de job dupa Id. Este permisa doar pentru admin sau recruiter-ul care a facut atribuirea.
+    /// </summary>
     [Authorize]
     [HttpDelete("{id:guid}")]
     public async Task<ActionResult<RequestResponse>> Delete([FromRoute] Guid id, CancellationToken cancellationToken)
@@ -42,6 +53,9 @@ public class JobAssignmentController(IJobAssignmentService jobAssignmentService,
             : ErrorMessageResult(currentUser.Error);
     }
 
+    /// <summary>
+    /// Returneaza o lista paginata de atribuiri de job filtrata in functie de utilizatorul curent si rolul acestuia.
+    /// </summary>
     [Authorize]
     [HttpGet]
     public async Task<ActionResult<RequestResponse<PagedResponse<JobAssignmentDTO>>>> GetPage([FromQuery] PaginationSearchQueryParams pagination, CancellationToken cancellationToken)
@@ -51,5 +65,4 @@ public class JobAssignmentController(IJobAssignmentService jobAssignmentService,
             ? FromServiceResponse(await jobAssignmentService.GetPage(pagination, currentUser.Result, cancellationToken))
             : ErrorMessageResult<PagedResponse<JobAssignmentDTO>>(currentUser.Error);
     }
-
 }

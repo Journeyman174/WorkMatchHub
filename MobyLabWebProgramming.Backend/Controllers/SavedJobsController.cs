@@ -8,11 +8,17 @@ using MobyLabWebProgramming.Infrastructure.Services.Interfaces;
 
 namespace MobyLabWebProgramming.Backend.Controllers;
 
+/// <summary>
+/// Controller responsabil pentru gestionarea joburilor salvate de utilizatori.
+/// Permite adaugarea, stergerea, listarea, cautarea si verificarea existentei joburilor salvate.
+/// </summary>
 [ApiController]
 [Route("api/[controller]/[action]")]
 public class SavedJobsController(ISavedJobService savedJobService, IUserService userService) : AuthorizedController(userService)
 {
-    // Returneaza joburile salvate de utilizator (paginat).
+    /// <summary>
+    /// Returneaza o lista paginata de joburi salvate de utilizatorul curent.
+    /// </summary>
     [Authorize]
     [HttpGet]
     public async Task<ActionResult<RequestResponse<PagedResponse<SavedJobDTO>>>> GetPage([FromQuery] PaginationSearchQueryParams pagination, CancellationToken cancellationToken)
@@ -23,7 +29,9 @@ public class SavedJobsController(ISavedJobService savedJobService, IUserService 
             : ErrorMessageResult<PagedResponse<SavedJobDTO>>(currentUser.Error);
     }
 
-    // Adauga un job salvat pentru utilizatorul curent.
+    /// <summary>
+    /// Adauga un job in lista de joburi salvate de utilizatorul curent.
+    /// </summary>
     [Authorize]
     [HttpPost]
     public async Task<ActionResult<RequestResponse>> Add([FromBody] SavedJobAddDTO savedJob, CancellationToken cancellationToken)
@@ -34,7 +42,9 @@ public class SavedJobsController(ISavedJobService savedJobService, IUserService 
             : ErrorMessageResult(currentUser.Error);
     }
 
-    // Sterge un job salvat dupa ID-ul ofertei.
+    /// <summary>
+    /// Sterge un job salvat pe baza Id-ului ofertei de job.
+    /// </summary>
     [Authorize]
     [HttpDelete("{jobOfferId:guid}")]
     public async Task<ActionResult<RequestResponse>> Delete([FromRoute] Guid jobOfferId, CancellationToken cancellationToken)
@@ -45,7 +55,9 @@ public class SavedJobsController(ISavedJobService savedJobService, IUserService 
             : ErrorMessageResult(currentUser.Error);
     }
 
-    // Returneaza toate joburile salvate de utilizatorul curent (fara paginare).
+    /// <summary>
+    /// Returneaza toate joburile salvate de utilizatorul curent, fara paginare.
+    /// </summary>
     [Authorize]
     [HttpGet("all")]
     public async Task<ActionResult<RequestResponse<List<SavedJobDTO>>>> GetAll(CancellationToken cancellationToken)
@@ -56,7 +68,9 @@ public class SavedJobsController(ISavedJobService savedJobService, IUserService 
             : ErrorMessageResult<List<SavedJobDTO>>(currentUser.Error);
     }
 
-    // Cauta joburi salvate dupa titlu.
+    /// <summary>
+    /// Cauta in lista de joburi salvate dupa titlul jobului.
+    /// </summary>
     [Authorize]
     [HttpGet("search")]
     public async Task<ActionResult<RequestResponse<List<SavedJobDTO>>>> Search([FromQuery] string search, CancellationToken cancellationToken)
@@ -67,7 +81,9 @@ public class SavedJobsController(ISavedJobService savedJobService, IUserService 
             : ErrorMessageResult<List<SavedJobDTO>>(currentUser.Error);
     }
 
-    // Verifica daca un job este salvat de utilizatorul curent.
+    /// <summary>
+    /// Verifica daca un anumit job este salvat de utilizatorul curent.
+    /// </summary>
     [Authorize]
     [HttpGet("is-saved/{jobOfferId:guid}")]
     public async Task<ActionResult<bool>> IsSaved([FromRoute] Guid jobOfferId, CancellationToken cancellationToken)
@@ -78,7 +94,9 @@ public class SavedJobsController(ISavedJobService savedJobService, IUserService 
             : Unauthorized();
     }
 
-    // Returneaza un job salvat specific dupa ID.
+    /// <summary>
+    /// Returneaza un job salvat specific dupa Id-ul salvarii (nu Id-ul ofertei).
+    /// </summary>
     [Authorize]
     [HttpGet("{id:guid}")]
     public async Task<ActionResult<RequestResponse<SavedJobDTO>>> GetById([FromRoute] Guid id, CancellationToken cancellationToken)

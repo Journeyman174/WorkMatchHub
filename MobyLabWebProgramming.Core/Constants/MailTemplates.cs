@@ -83,6 +83,4 @@ public static class MailTemplates
 </body>
 </html>";
 
-
-
 }

@@ -42,6 +42,12 @@ public interface IUserService
     /// </summary>
     public Task<ServiceResponse> DeleteUser(Guid id, UserDTO? requestingUser = null, CancellationToken cancellationToken = default);
 
+    /// <summary>
+    /// Sets the user's verification status to true. This action is restricted to administrators.
+    /// </summary>
+    /// <param name="userId">The ID of the user to be verified.</param>
+    /// <param name="requestingUser">The user making the verification request. Must be an admin.</param>
+    /// <param name="cancellationToken">Token to monitor for cancellation requests.</param>
+    /// <returns>A service response indicating whether the operation was successful or failed.</returns>
     Task<ServiceResponse> VerifyUser(Guid userId, UserDTO requestingUser, CancellationToken cancellationToken = default);
-
 }

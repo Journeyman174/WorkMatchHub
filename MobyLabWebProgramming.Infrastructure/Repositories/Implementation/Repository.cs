@@ -156,5 +156,4 @@ public sealed class Repository<TDb>(TDb dbContext) : IRepository<TDb> where TDb 
         return await DbContext.SaveChangesAsync(cancellationToken); // Persist the change and return the number of rows affected.
     }
 
-
 }

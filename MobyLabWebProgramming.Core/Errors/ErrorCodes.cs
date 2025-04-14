@@ -8,36 +8,55 @@ namespace MobyLabWebProgramming.Core.Errors;
 [JsonConverter(typeof(JsonStringEnumConverter))]
 public enum ErrorCodes
 {
+    // General
     Unknown,
     TechnicalError,
-    EntityNotFound,
     PhysicalFileNotFound,
-    UserAlreadyExists,
-    WrongPassword,
+
+    // Permissions
+    CannotAccess,
     CannotAdd,
     CannotUpdate,
     CannotDelete,
-    MailSendFailed,
-
-    // Coduri specifice
-    CompanyNotFound,
-    CompanyAlreadyExists,
-    CannotAccess,
-    JobAlreadySaved,
-    SavedJobNotFound,
-    JobOfferNotFound,
-    RecruiterCompanyExists,
-    JobRequestNotFound,
     OnlyAdmin,
-    JobAssignmentAlreadyExists,
-    JobAssignmentNotFound,
-    CannotSaveOwnJob,
+
+    // Validation
     InvalidId,
+    InvalidPaginationParams,
+    InvalidLoginData,
+    InvalidUserId,
+    InvalidUserData,
     InvalidCompanyData,
     InvalidJobAssignmentData,
     InvalidJobOfferData,
+    InvalidJobRequestData,
+
+    // User
+    UserAlreadyExists,
+    EntityNotFound,
+    WrongPassword,
+
+    // Company
+    CompanyAlreadyExists,
+    CompanyNotFound,
+    RecruiterCompanyExists,
+
+    // Job Offer
+    CannotSaveOwnJob,
+    JobAlreadySaved,
+    JobOfferNotFound,
+
+    // Job Request
     JobRequestAlreadyExists,
-    InvalidJobRequestData
+    JobRequestNotFound,
 
+    // Job Assignment
+    JobAssignmentAlreadyExists,
+    JobAssignmentNotFound,
 
+    // Saved Job
+    SavedJobNotFound,
+
+    // Mail
+    MailSendFailed
 }

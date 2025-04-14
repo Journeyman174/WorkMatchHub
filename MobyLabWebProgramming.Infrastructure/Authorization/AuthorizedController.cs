@@ -26,36 +26,29 @@ public abstract class AuthorizedController(IUserService userService) : BaseRespo
             return _userClaims;
         }
 
-        var enumerable = User.Claims.ToList();
-        var userId = enumerable.Where(x => x.Type == ClaimTypes.NameIdentifier).Select(x => Guid.Parse(x.Value)).FirstOrDefault();
-        var email = enumerable.Where(x => x.Type == ClaimTypes.Email).Select(x => x.Value).FirstOrDefault();
-        var name = enumerable.Where(x => x.Type == ClaimTypes.Name).Select(x => x.Value).FirstOrDefault();
+        var claimsList = User.Claims.ToList();
 
-        // Claims suplimentare
-        var role = enumerable
-            .Where(x => x.Type == "UserRole")
-            .Select(x => x.Value)
-            .FirstOrDefault();
+        var userIdClaim = claimsList.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
 
-        var companyName = enumerable
-            .Where(x => x.Type == "CompanyName")
-            .Select(x => x.Value)
-            .FirstOrDefault();
+        if (!Guid.TryParse(userIdClaim, out var userId))
+        {
+            throw new UnauthorizedAccessException("Invalid or missing user ID in claims.");
+        }
 
+        var email = claimsList.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value;
+        var name = claimsList.FirstOrDefault(x => x.Type == ClaimTypes.Name)?.Value;
 
-        var isVerified = enumerable
+        // Extended claims
+        var role = claimsList.FirstOrDefault(x => x.Type == "UserRole")?.Value;
+        var companyName = claimsList.FirstOrDefault(x => x.Type == "CompanyName")?.Value;
+        var fullName = claimsList.FirstOrDefault(x => x.Type == "FullName")?.Value;
+
+        var isVerified = claimsList
             .Where(x => x.Type == "IsVerified")
             .Select(x => bool.TryParse(x.Value, out var val) && val)
             .FirstOrDefault();
 
-        var fullName = enumerable
-            .Where(x => x.Type == "FullName")
-            .Select(x => x.Value)
-            .FirstOrDefault();
-
         _userClaims = new(userId, name, email, role, isVerified, fullName, companyName);
-
-
 
         return _userClaims;
     }

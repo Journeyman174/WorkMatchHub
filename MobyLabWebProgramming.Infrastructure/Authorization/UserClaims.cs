@@ -1,7 +1,7 @@
 ﻿namespace MobyLabWebProgramming.Infrastructure.Authorization;
 
 /// <summary>
-/// This record is used to store the claims extracted from the JWT
+/// This record is used to store the claims extracted from the JWT.
 /// </summary>
 public record UserClaims(
     Guid Id,
@@ -12,4 +12,3 @@ public record UserClaims(
     string? FullName = null,
     string? CompanyName = null
 );
-

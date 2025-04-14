@@ -94,6 +94,9 @@ public class UserController(IUserService userService) : AuthorizedController(use
             ErrorMessageResult(currentUser.Error);
     }
 
+    /// <summary>
+    /// Marcheaza un utilizator ca fiind verificat, daca utilizatorul curent este admin.
+    /// </summary>
     [Authorize]
     [HttpPost("{id:guid}")]
     public async Task<ActionResult<RequestResponse>> VerifyUser([FromRoute] Guid id)
