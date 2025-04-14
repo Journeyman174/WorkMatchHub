@@ -29,7 +29,7 @@ public static class MailTemplates
                     <table style=""border-top: 2px solid #3c87be; width: 660px;"" border=""0"" cellspacing=""0"" cellpadding=""0"">
                         <tbody>
                             <tr>
-                                <td>Welcome to My App!</td>
+                                <td>Welcome to WorkMatchHub !</td>
                             </tr>
                         </tbody>
                     </table>
@@ -39,4 +39,50 @@ public static class MailTemplates
     </table>
 </body>
 </html>";
+    public static string JobAssignmentAcceptedTemplate(string name, string jobTitle, string jobDescription) => $@"<!DOCTYPE html>
+<html lang=""en"" xmlns=""http://www.w3.org/1999/xhtml"">
+<head>
+    <meta charset=""utf-8"" />
+    <title>Job Assignment Notification</title>
+    <style type=""text/css"">
+        body {{
+            font-family: Arial, sans-serif;
+        }}
+        .container {{
+            width: 660px;
+            margin: auto;
+            padding: 20px;
+            background-color: #ffffff;
+            color: #000000;
+        }}
+        .job-title {{
+            font-size: 16px;
+            font-weight: bold;
+            color: #2a6496;
+        }}
+        .job-description {{
+            background-color: #f2f2f2;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+        }}
+    </style>
+</head>
+<body>
+    <div class=""container"">
+        <p><strong>Dear {name},</strong></p>
+        <p>Congratulations!</p>
+        <p>You’ve been accepted for the job: <span class=""job-title"">{jobTitle}</span>.</p>
+        <div class=""job-description"">
+            <p><strong>Job Description:</strong></p>
+            <p>{jobDescription}</p>
+        </div>
+        <p>Log into <strong>WorkMatchHub</strong> to see more details and prepare for your new opportunity.</p>
+        <p style=""margin-top: 20px;"">Best regards,<br/><em>The WorkMatchHub Team</em></p>
+    </div>
+</body>
+</html>";
+
+
+
 }

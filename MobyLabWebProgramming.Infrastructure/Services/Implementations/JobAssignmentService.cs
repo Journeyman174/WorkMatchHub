@@ -13,7 +13,7 @@ using MobyLabWebProgramming.Infrastructure.Services.Interfaces;
 
 namespace MobyLabWebProgramming.Infrastructure.Services.Implementations;
 
-public class JobAssignmentService(IRepository<WebAppDatabaseContext> repository) : IJobAssignmentService
+public class JobAssignmentService(IRepository<WebAppDatabaseContext> repository, IMailService mailService) : IJobAssignmentService
 {
     public async Task<ServiceResponse<JobAssignmentDTO>> GetById(Guid id, CancellationToken cancellationToken = default)
     {
@@ -22,7 +22,6 @@ public class JobAssignmentService(IRepository<WebAppDatabaseContext> repository)
             ? ServiceResponse.ForSuccess(result)
             : ServiceResponse.FromError<JobAssignmentDTO>(CommonErrors.JobAssignmentNotFound);
     }
-
 
     public async Task<ServiceResponse<PagedResponse<JobAssignmentDTO>>> GetPage(PaginationSearchQueryParams pagination, UserDTO requestingUser, CancellationToken cancellationToken = default)
     {
@@ -57,9 +56,34 @@ public class JobAssignmentService(IRepository<WebAppDatabaseContext> repository)
         await repository.AddAsync(newAssignment, cancellationToken);
 
         var result = await repository.GetAsync(new JobAssignmentProjectionSpec(newAssignment.Id), cancellationToken);
-        return result != null
-            ? ServiceResponse.ForSuccess(result)
-            : ServiceResponse.FromError<JobAssignmentDTO>(CommonErrors.JobAssignmentNotFound);
+
+        if (result != null)
+        {
+            var jobSeeker = result.User;
+            var jobTitle = result.JobOffer?.Title ?? "a job";
+            var jobDescription = result.JobOffer?.Description ?? "No job description provided.";
+
+            if (!string.IsNullOrEmpty(jobSeeker?.Email))
+            {
+                await mailService.SendMail(
+                    jobSeeker.Email,
+                    "You've been accepted!",
+                    MailTemplates.JobAssignmentAcceptedTemplate(
+                        jobSeeker.FullName ?? jobSeeker.Name,
+                        jobTitle,
+                        jobDescription
+                    ),
+                    true,
+                    "WorkMatchHub",
+                    cancellationToken
+                );
+            }
+
+
+            return ServiceResponse.ForSuccess(result);
+        }
+
+        return ServiceResponse.FromError<JobAssignmentDTO>(CommonErrors.JobAssignmentNotFound);
     }
 
     public async Task<ServiceResponse> DeleteJobAssignment(Guid id, UserDTO requestingUser, CancellationToken cancellationToken = default)

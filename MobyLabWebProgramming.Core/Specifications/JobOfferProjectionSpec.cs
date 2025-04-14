@@ -30,7 +30,11 @@ public sealed class JobOfferProjectionSpec : Specification<JobOffer, JobOfferDTO
                     Id = e.Company.User.Id,
                     Name = e.Company.User.Name,
                     Email = e.Company.User.Email,
-                    Role = e.Company.User.Role
+                    Role = e.Company.User.Role,
+                    IsVerified = e.Company.User.IsVerified,
+                    FullName = e.Company.User.FullName,
+                    CompanyName = e.Company.User.Company != null ? e.Company.User.Company.Name : ""
+
                 },
                 CreatedAt = e.Company.CreatedAt
             },
@@ -39,7 +43,11 @@ public sealed class JobOfferProjectionSpec : Specification<JobOffer, JobOfferDTO
                 Id = e.User.Id,
                 Name = e.User.Name,
                 Email = e.User.Email,
-                Role = e.User.Role
+                Role = e.User.Role,
+                IsVerified = e.User.IsVerified,
+                FullName = e.User.FullName,
+                CompanyName = e.User.Company != null ? e.User.Company.Name : ""
+
             },
             CreatedAt = e.CreatedAt
         });

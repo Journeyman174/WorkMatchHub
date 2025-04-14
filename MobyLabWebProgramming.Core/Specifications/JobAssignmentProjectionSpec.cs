@@ -19,7 +19,10 @@ public sealed class JobAssignmentProjectionSpec : Specification<JobAssignment, J
                     .ThenInclude(jo => jo.Company)
                         .ThenInclude(c => c.User)
             .Include(e => e.JobOffer)
-                .ThenInclude(jo => jo.User);
+                .ThenInclude(jo => jo.User)
+            .Include(e => e.JobOffer)
+                .ThenInclude(jo => jo.Company)
+                    .ThenInclude(c => c.User);
 
         Query.Select(e => new JobAssignmentDTO
         {
@@ -73,7 +76,7 @@ public sealed class JobAssignmentProjectionSpec : Specification<JobAssignment, J
                             Role = e.JobRequest.JobOffer.Company.User.Role,
                             FullName = e.JobRequest.JobOffer.Company.User.FullName,
                             IsVerified = e.JobRequest.JobOffer.Company.User.IsVerified,
-                            CompanyName = e.JobRequest.JobOffer.Company.User.Company!.Name
+                            CompanyName = e.JobRequest.JobOffer.Company.User.Company != null ? e.JobRequest.JobOffer.Company.User.Company!.Name : ""
                         }
                     },
                     Recruiter = new UserDTO
@@ -94,7 +97,35 @@ public sealed class JobAssignmentProjectionSpec : Specification<JobAssignment, J
                 Title = e.JobOffer.Title,
                 Description = e.JobOffer.Description,
                 Salary = e.JobOffer.Salary,
-                CreatedAt = e.JobOffer.CreatedAt
+                CreatedAt = e.JobOffer.CreatedAt,
+                Company = new CompanyDTO
+                {
+                    Id = e.JobOffer.Company.Id,
+                    Name = e.JobOffer.Company.Name,
+                    Description = e.JobOffer.Company.Description,
+                    Location = e.JobOffer.Company.Location,
+                    CreatedAt = e.JobOffer.Company.CreatedAt,
+                    User = new UserDTO
+                    {
+                        Id = e.JobOffer.Company.User.Id,
+                        Name = e.JobOffer.Company.User.Name,
+                        Email = e.JobOffer.Company.User.Email,
+                        Role = e.JobOffer.Company.User.Role,
+                        FullName = e.JobOffer.Company.User.FullName,
+                        IsVerified = e.JobOffer.Company.User.IsVerified,
+                        CompanyName = e.JobOffer.Company.User.Company != null ? e.JobOffer.Company.User.Company.Name : ""
+                    }
+                },
+                Recruiter = new UserDTO
+                {
+                    Id = e.JobOffer.User.Id,
+                    Name = e.JobOffer.User.Name,
+                    Email = e.JobOffer.User.Email,
+                    Role = e.JobOffer.User.Role,
+                    FullName = e.JobOffer.User.FullName,
+                    IsVerified = e.JobOffer.User.IsVerified,
+                    CompanyName = e.JobOffer.User.Company != null ? e.JobOffer.User.Company.Name : ""
+                }
             }
         });
     }
@@ -219,7 +250,4 @@ public sealed class JobAssignmentProjectionSpec : Specification<JobAssignment, J
             }
         });
     }
-
-
-
 }

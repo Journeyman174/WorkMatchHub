@@ -94,7 +94,7 @@ public class UserService(IRepository<WebAppDatabaseContext> repository, ILoginSe
             FullName = user.FullName
         }, cancellationToken); // A new entity is created and persisted in the database.
 
-        await mailService.SendMail(user.Email, "Welcome!", MailTemplates.UserAddTemplate(user.Name), true, "My App", cancellationToken); // You can send a notification on the user email. Change the email if you want.
+        await mailService.SendMail(user.Email, "Welcome!", MailTemplates.UserAddTemplate(user.FullName ?? user.Name), true, "WorkMatchHub", cancellationToken); // You can send a notification on the user email. Change the email if you want.
 
         return ServiceResponse.ForSuccess();
     }
