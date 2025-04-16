@@ -5,15 +5,15 @@ using MobyLabWebProgramming.Core.Entities;
 
 namespace MobyLabWebProgramming.Core.Specifications;
 
-// Aceasta clasa este folosită pentru a crea specificatii de proiectie ale entitatii Company in DTO-uri pentru a fi folosite in serviciile backend.
+// Clasa folosita pentru a crea specificatii de proiectie ale entitatii Company in DTO-uri pentru a fi folosite in serviciile backend.
 public sealed class CompanyProjectionSpec : Specification<Company, CompanyDTO>
 {
     // Constructorul default permite ordonarea companiilor dupa data crearii si include utilizatorul asociat companiei.
     public CompanyProjectionSpec(bool orderByCreatedAt = false)
     {
-        Query.Include(e => e.User); // Include utilizatorul asociat companiei pentru a evita campuri null in DTO.
+        Query.Include(e => e.User); // Include utilizatorul asociat companiei.
 
-        // Selectam manual campurile ce vor fi mapate in DTO pentru a controla exact ce informatii trimitem clientului.
+        // Selecteaza campurile ce vor fi mapate in DTO.
         Query.Select(e => new CompanyDTO
         {
             Id = e.Id,
@@ -26,7 +26,7 @@ public sealed class CompanyProjectionSpec : Specification<Company, CompanyDTO>
                 Name = e.User.Name,
                 Email = e.User.Email,
                 Role = e.User.Role,
-                FullName = e.User.FullName ?? "", // Protectie impotriva valorilor null.
+                FullName = e.User.FullName ?? "",
                 IsVerified = e.User.IsVerified,
                 CompanyName = e.User.Company != null ? e.User.Company.Name : ""
             },
@@ -35,14 +35,14 @@ public sealed class CompanyProjectionSpec : Specification<Company, CompanyDTO>
 
         if (orderByCreatedAt)
         {
-            Query.OrderByDescending(e => e.CreatedAt); // Ordonam descrescator dupa data crearii daca este specificat.
+            Query.OrderByDescending(e => e.CreatedAt); // Ordine descrescatoare dupa data crearii daca este specificat.
         }
     }
 
-    // Constructor pentru a selecta o companie dupa ID-ul acesteia.
+    // Constructor pentru a selecta o companie dupa Id-ul acesteia.
     public CompanyProjectionSpec(Guid id) : this() => Query.Where(e => e.Id == id);
 
-    // Constructor pentru cautare dupa numele companiei cu LIKE (case-insensitive).
+    // Constructor pentru cautare dupa numele companiei.
     public CompanyProjectionSpec(string? search) : this(true)
     {
         if (!string.IsNullOrWhiteSpace(search))
@@ -50,11 +50,5 @@ public sealed class CompanyProjectionSpec : Specification<Company, CompanyDTO>
             var searchExpr = $"%{search.Trim().Replace(" ", "%")}%";
             Query.Where(e => EF.Functions.ILike(e.Name, searchExpr));
         }
-    }
-
-    // Constructor pentru a obtine compania dupa ID-ul utilizatorului (de obicei recruiterul).
-    public CompanyProjectionSpec(Guid userId, bool isByUser) : this()
-    {
-        Query.Where(e => e.User.Id == userId); // Filtram companiile care apartin acestui utilizator.
     }
 }

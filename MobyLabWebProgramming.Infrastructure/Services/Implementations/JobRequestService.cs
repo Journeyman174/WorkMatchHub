@@ -1,6 +1,4 @@
-﻿using System.Net;
-using MobyLabWebProgramming.Core.Constants;
-using MobyLabWebProgramming.Core.DataTransferObjects;
+﻿using MobyLabWebProgramming.Core.DataTransferObjects;
 using MobyLabWebProgramming.Core.Entities;
 using MobyLabWebProgramming.Core.Enums;
 using MobyLabWebProgramming.Core.Errors;
@@ -11,14 +9,14 @@ using MobyLabWebProgramming.Infrastructure.Database;
 using MobyLabWebProgramming.Infrastructure.Repositories.Interfaces;
 using MobyLabWebProgramming.Infrastructure.Services.Interfaces;
 
-// Serviciul gestioneaza operatiile legate de cererile de job.
+// Gestioneaza operatiile legate de cererile de job.
 namespace MobyLabWebProgramming.Infrastructure.Services.Implementations;
 
 public class JobRequestService(IRepository<WebAppDatabaseContext> repository) : IJobRequestService
 {
     public async Task<ServiceResponse<JobRequestDTO>> GetJobRequest(Guid id, UserDTO requestingUser, CancellationToken cancellationToken = default)
     {
-        // Verifica daca ID-ul este valid
+        // Verifica daca Id-ul este valid
         if (id == Guid.Empty)
             return ServiceResponse.FromError<JobRequestDTO>(CommonErrors.InvalidId);
 
@@ -37,39 +35,89 @@ public class JobRequestService(IRepository<WebAppDatabaseContext> repository) : 
 
     public async Task<ServiceResponse> AddJobRequest(JobRequestAddDTO jobRequest, UserDTO requestingUser, CancellationToken cancellationToken = default)
     {
-        // Verifica daca utilizatorul are dreptul de a face cererea
+        // Verifica rolul si statusul utilizatorului
         if (requestingUser.Role != UserRoleEnum.JobSeeker || !requestingUser.IsVerified)
         {
             return ServiceResponse.FromError(CommonErrors.Forbidden);
         }
 
-        // Verifica daca datele cererii sunt valide
-        if (jobRequest == null || jobRequest.JobOfferId == Guid.Empty)
+        // Valideaza datele introduse
+        if (jobRequest == null ||
+            string.IsNullOrWhiteSpace(jobRequest.CoverLetter) ||
+            string.IsNullOrWhiteSpace(jobRequest.JobTitle) ||
+            string.IsNullOrWhiteSpace(jobRequest.CompanyName))
         {
             return ServiceResponse.FromError(CommonErrors.InvalidJobRequestData);
         }
 
-        // Verifica daca oferta de job exista
-        var jobOffer = await repository.GetAsync(new JobOfferSpec(jobRequest.JobOfferId), cancellationToken);
+        // Cauta oferta de job pe baza titlului si a numelui companiei
+        var jobOffer = await repository.GetAsync(
+            new JobOfferSpec(jobRequest.JobTitle.Trim(), jobRequest.CompanyName.Trim(), true),
+            cancellationToken
+        );
+
+
         if (jobOffer == null)
         {
             return ServiceResponse.FromError(CommonErrors.JobOfferNotFound);
         }
 
-        // Verifica daca deja a aplicat la jobul respectiv
-        var existing = await repository.GetAsync(new JobRequestSpec(requestingUser.Id, jobRequest.JobOfferId), cancellationToken);
+        // Verifica daca utilizatorul a aplicat deja
+        var existing = await repository.GetAsync(new JobRequestSpec(requestingUser.Id, jobOffer.Id), cancellationToken);
         if (existing != null)
         {
             return ServiceResponse.FromError(CommonErrors.JobRequestAlreadyExists);
         }
 
-        // Adauga cererea noua in baza de date
+        // Salveaza cererea
         await repository.AddAsync(new JobRequest
         {
-            JobOfferId = jobRequest.JobOfferId,
+            JobOfferId = jobOffer.Id,
             UserId = requestingUser.Id,
             CoverLetter = jobRequest.CoverLetter
         }, cancellationToken);
+
+        return ServiceResponse.ForSuccess();
+    }
+
+    public async Task<ServiceResponse> UpdateJobRequest(JobRequestUpdateDTO updateDTO, UserDTO requestingUser, CancellationToken cancellationToken = default)
+    {
+        // Doar JobSeeker verificat poate face update
+        if (requestingUser.Role != UserRoleEnum.JobSeeker || !requestingUser.IsVerified)
+        {
+            return ServiceResponse.FromError(CommonErrors.Forbidden);
+        }
+
+        // Validare input
+        if (updateDTO == null || string.IsNullOrWhiteSpace(updateDTO.CoverLetter) || string.IsNullOrWhiteSpace(updateDTO.JobTitle) || string.IsNullOrWhiteSpace(updateDTO.CompanyName))
+        {
+            return ServiceResponse.FromError(CommonErrors.InvalidJobRequestData);
+        }
+
+        // Cauta jobul dupa titlu si companie
+        var jobOffer = await repository.GetAsync(new JobOfferSpec(updateDTO.JobTitle.Trim(), updateDTO.CompanyName.Trim(), true), cancellationToken);
+
+        if (jobOffer == null)
+        {
+            return ServiceResponse.FromError(CommonErrors.JobOfferNotFound);
+        }
+
+        // Cauta cererea de job existenta a userului pentru acest job
+        var jobRequest = await repository.GetAsync(new JobRequestSpec(requestingUser.Id, jobOffer.Id), cancellationToken);
+        if (jobRequest == null)
+        {
+            return ServiceResponse.FromError(CommonErrors.JobRequestNotFound);
+        }
+
+        // Verifica daca jobul nu s-a schimbat intre timp
+        if (jobRequest.JobOffer.Title != updateDTO.JobTitle.Trim() || jobRequest.JobOffer.Company.Name != updateDTO.CompanyName.Trim())
+        {
+            return ServiceResponse.FromError(CommonErrors.InvalidJobRequestData);
+        }
+
+        // Update
+        jobRequest.CoverLetter = updateDTO.CoverLetter;
+        await repository.UpdateAsync(jobRequest, cancellationToken);
 
         return ServiceResponse.ForSuccess();
     }

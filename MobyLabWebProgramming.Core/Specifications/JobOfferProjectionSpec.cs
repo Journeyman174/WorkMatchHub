@@ -7,15 +7,15 @@ namespace MobyLabWebProgramming.Core.Specifications;
 
 public sealed class JobOfferProjectionSpec : Specification<JobOffer, JobOfferDTO>
 {
-    // Constructor ce permite ordonarea optionala dupa data crearii
+    // Constructor pentru ordonarea optionala dupa data crearii
     public JobOfferProjectionSpec(bool orderByCreatedAt = false)
     {
         // Include entitatile legate pentru companie si recruiter
         Query.Include(e => e.Company)
-             .ThenInclude(c => c.User); // Include utilizatorul asociat companiei
-        Query.Include(e => e.User); // Include recruiterul
+             .ThenInclude(c => c.User); // Utilizatorul asociat companiei
+        Query.Include(e => e.User); // Recruiterul
 
-        // Selecteaza datele in JobOfferDTO si maparea inlantuita
+        // Selecteaza datele in JobOfferDTO si mapare.
         Query.Select(e => new JobOfferDTO
         {
             Id = e.Id,
@@ -59,7 +59,7 @@ public sealed class JobOfferProjectionSpec : Specification<JobOffer, JobOfferDTO
         }
     }
 
-    // Constructor pentru cautare dupa ID
+    // Constructor pentru cautare dupa Id
     public JobOfferProjectionSpec(Guid id) : this() =>
         Query.Where(e => e.Id == id);
 
@@ -69,7 +69,7 @@ public sealed class JobOfferProjectionSpec : Specification<JobOffer, JobOfferDTO
         if (!string.IsNullOrWhiteSpace(search))
         {
             var searchExpr = $"%{search.Trim().Replace(" ", "%")}%";
-            Query.Where(e => EF.Functions.ILike(e.Title, searchExpr)); // Cautare partiala si case-insensitive
+            Query.Where(e => EF.Functions.ILike(e.Title, searchExpr));
         }
     }
 }

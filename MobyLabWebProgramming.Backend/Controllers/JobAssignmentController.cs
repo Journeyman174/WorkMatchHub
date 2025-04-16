@@ -10,7 +10,7 @@ namespace MobyLabWebProgramming.Backend.Controllers;
 
 /// <summary>
 /// Controller pentru gestionarea atribuirilor de job. 
-/// Oferă functionalitati pentru adaugarea, stergerea si vizualizarea atribuirilor de catre recruiter sau admin.
+/// Ofera functionalitati pentru adaugarea, stergerea si vizualizarea atribuirilor de catre recruiter sau admin.
 /// </summary>
 [ApiController]
 [Route("api/[controller]/[action]")]
@@ -28,16 +28,30 @@ public class JobAssignmentController(IJobAssignmentService jobAssignmentService,
     }
 
     /// <summary>
-    /// Adauga o atribuire de job pentru un utilizator de catre un recruiter. Doar recruiterii pot efectua aceasta actiune.
+    /// Creeaza o atribuire de job pentru un utilizator de catre un recruiter sau admin.
+    /// Se bazeaza pe titlul jobului si email-ul job seeker-ului.
     /// </summary>
     [Authorize]
     [HttpPost]
-    public async Task<ActionResult<RequestResponse<JobAssignmentDTO>>> Add([FromBody] JobAssignmentAddDTO assignment, CancellationToken cancellationToken)
+    public async Task<ActionResult<RequestResponse>> Add([FromBody] JobAssignmentAddDTO assignment, CancellationToken cancellationToken)
     {
         var currentUser = await GetCurrentUser();
         return currentUser.Result != null
             ? FromServiceResponse(await jobAssignmentService.AddJobAssignment(assignment, currentUser.Result, cancellationToken))
-            : ErrorMessageResult<JobAssignmentDTO>(currentUser.Error);
+            : ErrorMessageResult(currentUser.Error);
+    }
+
+    /// <summary>
+    /// Actualizeaza data atribuirii unei alocari de job. Doar adminul sau recruiterul poate modifica.
+    /// </summary>
+    [Authorize]
+    [HttpPut("{id:guid}")]
+    public async Task<ActionResult<RequestResponse>> Update([FromRoute] Guid id, [FromBody] JobAssignmentUpdateDTO updateDTO, CancellationToken cancellationToken)
+    {
+        var currentUser = await GetCurrentUser();
+        return currentUser.Result != null
+            ? FromServiceResponse(await jobAssignmentService.UpdateJobAssignment(id, updateDTO, currentUser.Result, cancellationToken))
+            : ErrorMessageResult(currentUser.Error);
     }
 
     /// <summary>

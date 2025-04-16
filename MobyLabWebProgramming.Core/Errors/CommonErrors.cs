@@ -28,6 +28,8 @@ public static class CommonErrors
     public static ErrorMessage CompanyNotFound => new(HttpStatusCode.NotFound, "Company doesn't exist!", ErrorCodes.CompanyNotFound);
     public static ErrorMessage InvalidCompanyData => new(HttpStatusCode.BadRequest, "The provided company data is not valid.", ErrorCodes.InvalidCompanyData);
     public static ErrorMessage RecruiterCompanyExists => new(HttpStatusCode.Conflict, "Recruiter already owns a company!", ErrorCodes.RecruiterCompanyExists);
+    public static ErrorMessage MultipleCompaniesFound => new(HttpStatusCode.Conflict, "User is associated with multiple companies!", ErrorCodes.MultipleCompaniesFound);
+
 
     // Job Offer Errors
     public static ErrorMessage CannotSaveOwnJob => new(HttpStatusCode.Forbidden, "You cannot save your own job offer.", ErrorCodes.CannotSaveOwnJob);
@@ -39,6 +41,7 @@ public static class CommonErrors
     public static ErrorMessage InvalidJobRequestData => new(HttpStatusCode.BadRequest, "Invalid job request data.", ErrorCodes.InvalidJobRequestData);
     public static ErrorMessage JobRequestAlreadyExists => new(HttpStatusCode.Conflict, "Job request already exists!", ErrorCodes.JobRequestAlreadyExists);
     public static ErrorMessage JobRequestNotFound => new(HttpStatusCode.NotFound, "Job request not found.", ErrorCodes.JobRequestNotFound);
+    public static ErrorMessage MultipleJobRequestsFound => new(HttpStatusCode.Conflict, "Multiple job requests found for the current user.", ErrorCodes.MultipleJobRequestsFound);
 
     // Job Assignment Errors
     public static ErrorMessage InvalidJobAssignmentData => new(HttpStatusCode.BadRequest, "Invalid job assignment data provided.", ErrorCodes.InvalidJobAssignmentData);
@@ -52,4 +55,3 @@ public static class CommonErrors
     public static ErrorMessage InvalidId => new(HttpStatusCode.BadRequest, "The provided ID is invalid.", ErrorCodes.InvalidId);
     public static ErrorMessage InvalidPaginationParams => new(HttpStatusCode.BadRequest, "Invalid pagination parameters provided.", ErrorCodes.InvalidPaginationParams);
 }
-

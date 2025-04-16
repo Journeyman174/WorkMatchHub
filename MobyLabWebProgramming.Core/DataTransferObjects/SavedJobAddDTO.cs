@@ -1,7 +1,11 @@
-﻿namespace MobyLabWebProgramming.Core.DataTransferObjects
+﻿namespace MobyLabWebProgramming.Core.DataTransferObjects;
+
+/// <summary>
+/// DTO folosit pentru a declansa adaugarea unui job salvat.
+/// Jobul este identificat prin titlu si numele companiei.
+/// </summary>
+public class SavedJobAddDTO
 {
-    public class SavedJobAddDTO
-    {
-        public Guid JobOfferId { get; set; }
-    }
+    public string JobTitle { get; set; } = null!;     // Titlul jobului
+    public string CompanyName { get; set; } = null!;  // Numele companiei
 }

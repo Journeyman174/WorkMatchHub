@@ -8,7 +8,7 @@ using MobyLabWebProgramming.Infrastructure.Database;
 using MobyLabWebProgramming.Infrastructure.Repositories.Interfaces;
 using MobyLabWebProgramming.Infrastructure.Services.Interfaces;
 
-// Serviciul gestioneaza operatiile pentru joburile salvate de utilizatori.
+// Gestioneaza operatiile pentru joburile salvate de utilizatori.
 namespace MobyLabWebProgramming.Infrastructure.Services.Implementations;
 
 public class SavedJobService(IRepository<WebAppDatabaseContext> repository) : ISavedJobService
@@ -22,32 +22,40 @@ public class SavedJobService(IRepository<WebAppDatabaseContext> repository) : IS
     }
 
     // Adauga un job salvat pentru utilizatorul curent.
+    // Identifica oferta de job dupa titlu si numele companiei.
     public async Task<ServiceResponse> AddSavedJob(SavedJobAddDTO savedJob, UserDTO requestingUser, CancellationToken cancellationToken = default)
     {
-        // Verificam daca jobul a fost deja salvat
-        var existing = await repository.GetAsync(new SavedJobSpec(requestingUser.Id, savedJob.JobOfferId), cancellationToken);
-        if (existing != null)
+        // Verifica daca datele sunt valide
+        if (savedJob == null || string.IsNullOrWhiteSpace(savedJob.JobTitle) || string.IsNullOrWhiteSpace(savedJob.CompanyName))
         {
-            return ServiceResponse.FromError(CommonErrors.JobAlreadySaved);
+            return ServiceResponse.FromError(CommonErrors.InvalidJobOfferData);
         }
 
-        // Verificam daca job offer-ul chiar exista
-        var jobOffer = await repository.GetAsync<JobOffer>(savedJob.JobOfferId, cancellationToken);
+        // Cauta oferta de job dupa titlu si companie
+        var jobOffer = await repository.GetAsync(new JobOfferSpec(savedJob.JobTitle.Trim(), savedJob.CompanyName.Trim(), true), cancellationToken);
         if (jobOffer == null)
         {
             return ServiceResponse.FromError(CommonErrors.JobOfferNotFound);
         }
 
-        // Optional: Prevenim salvarea propriului job (recruiterul)
+        // Verifica daca jobul a fost deja salvat
+        var existing = await repository.GetAsync(new SavedJobSpec(requestingUser.Id, jobOffer.Id), cancellationToken);
+        if (existing != null)
+        {
+            return ServiceResponse.FromError(CommonErrors.JobAlreadySaved);
+        }
+
+        // Previne salvarea propriului job (recruiterul)
         if (jobOffer.UserId == requestingUser.Id)
         {
             return ServiceResponse.FromError(CommonErrors.CannotSaveOwnJob);
         }
 
+        // Salveaza jobul
         await repository.AddAsync(new SavedJob
         {
             UserId = requestingUser.Id,
-            JobOfferId = savedJob.JobOfferId,
+            JobOfferId = jobOffer.Id,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow
         }, cancellationToken);
@@ -68,7 +76,7 @@ public class SavedJobService(IRepository<WebAppDatabaseContext> repository) : IS
         return ServiceResponse.ForSuccess();
     }
 
-    // Returneaza un job salvat specific dupa ID.
+    // Returneaza un job salvat specific dupa Id.
     public async Task<ServiceResponse<SavedJobDTO>> GetSavedJobById(Guid id, CancellationToken cancellationToken = default)
     {
         var result = await repository.GetAsync(new SavedJobProjectionSpec(id), cancellationToken);

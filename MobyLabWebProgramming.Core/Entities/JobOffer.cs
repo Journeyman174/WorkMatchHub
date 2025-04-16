@@ -19,7 +19,7 @@ public class JobOffer : BaseEntity
     // Id-ul utilizatorului care a creat oferta (recruiter) - cheie straina
     public Guid UserId { get; set; }
 
-    // Referinta catre utilizatorul (recruiterul) care a creat oferta - proprietate de navigare
+    // Referinta catre recruiterul care a creat oferta - proprietate de navigare
     public User User { get; set; } = null!;
 
     // Relatie One-to-Many cu entitatea JobAssignment - asocieri de joburi cu candidati selectati

@@ -1,18 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace MobyLabWebProgramming.Core.DataTransferObjects;
 
-namespace MobyLabWebProgramming.Core.DataTransferObjects
+/// <summary>
+/// DTO folosit pentru a transmite informatii despre o alocare de job.
+/// Contine referinte catre cererea de job, oferta si utilizatorul implicat.
+/// </summary>
+public class JobAssignmentDTO
 {
-    public class JobAssignmentDTO
-    {
-        public Guid Id { get; set; }
-        public JobRequestDTO JobRequest { get; set; } = null!;
-        public JobOfferDTO JobOffer { get; set; } = null!;
-        public DateTime AssignedAt { get; set; }
-        public UserDTO User { get; set; } = null!;
-        public DateTime CreatedAt { get; set; }
-    }
+    public Guid Id { get; set; } // Id-ul alocarii
+    public JobRequestDTO JobRequest { get; set; } = null!; // Cererea de job asociata
+    public JobOfferDTO JobOffer { get; set; } = null!; // Oferta de job asociata
+    public DateTime AssignedAt { get; set; } // Data alocarii efective
+    public UserDTO User { get; set; } = null!; // Utilizatorul implicat (JobSeeker)
+    public DateTime CreatedAt { get; set; } // Data crearii inregistrarii
 }

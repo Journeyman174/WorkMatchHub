@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace MobyLabWebProgramming.Core.DataTransferObjects;
 
-namespace MobyLabWebProgramming.Core.DataTransferObjects
+/// <summary>
+/// DTO folosit pentru a transmite informatii complete despre o companie.
+/// </summary>
+public class CompanyDTO
 {
-    public class CompanyDTO
-    {
-        public Guid Id { get; set; }
-        public string Name { get; set; } = null!;
-        public string? Description { get; set; }
-        public string? Location { get; set; }
-        public UserDTO User { get; set; } = null!;
-        public DateTime CreatedAt { get; set; }
-    }
+    public Guid Id { get; set; } // Id-ul companiei
+    public string Name { get; set; } = null!; // Numele companiei
+    public string? Description { get; set; } // Descriere optionala
+    public string? Location { get; set; } // Locatia companiei
+    public UserDTO User { get; set; } = null!; // Utilizatorul asociat companiei
+    public DateTime CreatedAt { get; set; } // Data crearii companiei
 }

@@ -40,6 +40,7 @@ public enum ErrorCodes
     CompanyAlreadyExists,
     CompanyNotFound,
     RecruiterCompanyExists,
+    MultipleCompaniesFound,
 
     // Job Offer
     CannotSaveOwnJob,
@@ -49,6 +50,7 @@ public enum ErrorCodes
     // Job Request
     JobRequestAlreadyExists,
     JobRequestNotFound,
+    MultipleJobRequestsFound,
 
     // Job Assignment
     JobAssignmentAlreadyExists,

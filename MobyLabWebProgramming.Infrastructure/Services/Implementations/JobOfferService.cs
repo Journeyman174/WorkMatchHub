@@ -1,5 +1,4 @@
-﻿using MobyLabWebProgramming.Core.Constants;
-using MobyLabWebProgramming.Core.DataTransferObjects;
+﻿using MobyLabWebProgramming.Core.DataTransferObjects;
 using MobyLabWebProgramming.Core.Entities;
 using MobyLabWebProgramming.Core.Enums;
 using MobyLabWebProgramming.Core.Errors;
@@ -12,13 +11,13 @@ using MobyLabWebProgramming.Infrastructure.Services.Interfaces;
 
 namespace MobyLabWebProgramming.Infrastructure.Services.Implementations;
 
-// Serviciul gestioneaza operatiile pentru entitatile de tip JobOffer.
+// Gestioneaza operatiile pentru entitatea JobOffer.
 public class JobOfferService(IRepository<WebAppDatabaseContext> repository) : IJobOfferService
 {
-    // Returneaza o oferta de job dupa ID.
+    // Returneaza o oferta de job dupa Id
     public async Task<ServiceResponse<JobOfferDTO>> GetJobOffer(Guid id, CancellationToken cancellationToken = default)
     {
-        // Verifica daca ID-ul este valid
+        // Verifica daca Id-ul este valid
         if (id == Guid.Empty)
         {
             return ServiceResponse.FromError<JobOfferDTO>(CommonErrors.InvalidId);
@@ -50,35 +49,35 @@ public class JobOfferService(IRepository<WebAppDatabaseContext> repository) : IJ
             return ServiceResponse.FromError(CommonErrors.Forbidden);
         }
 
-        // Verifica daca compania exista
-        var company = await repository.GetAsync(new CompanySpec(jobOffer.CompanyId), cancellationToken);
-        if (company == null)
+        // Cauta toate companiile asociate utilizatorului
+        var companies = await repository.ListAsync(new CompanySpec(requestingUser.Id, isByUser: true), cancellationToken);
+
+        // Verifica daca este asociat cu o singura companie
+        if (companies.Count != 1)
         {
-            return ServiceResponse.FromError(CommonErrors.CompanyNotFound);
+            return ServiceResponse.FromError(CommonErrors.MultipleCompaniesFound);
         }
 
-        // Verifica daca recruiterul are acces la aceasta companie
-        if (requestingUser.Role == UserRoleEnum.Recruiter && company.UserId != requestingUser.Id)
-        {
-            return ServiceResponse.FromError(CommonErrors.Forbidden);
-        }
+        var company = companies.First();
 
+        // Creeaza oferta de job cu datele furnizate si compania identificata
         await repository.AddAsync(new JobOffer
         {
             Title = jobOffer.Title,
             Description = jobOffer.Description,
             Salary = jobOffer.Salary,
-            CompanyId = jobOffer.CompanyId,
+            CompanyId = company.Id,
             UserId = requestingUser.Id
         }, cancellationToken);
 
         return ServiceResponse.ForSuccess();
     }
 
+
     // Actualizeaza o oferta de job existenta.
     public async Task<ServiceResponse> UpdateJobOffer(Guid id, JobOfferUpdateDTO jobOffer, UserDTO requestingUser, CancellationToken cancellationToken = default)
     {
-        // Verifica daca ID-ul si datele sunt valide
+        // Verifica daca Id-ul si datele sunt valide
         if (id == Guid.Empty || jobOffer == null)
         {
             return ServiceResponse.FromError(CommonErrors.InvalidJobOfferData);
@@ -112,7 +111,7 @@ public class JobOfferService(IRepository<WebAppDatabaseContext> repository) : IJ
     // Sterge o oferta de job.
     public async Task<ServiceResponse> DeleteJobOffer(Guid id, UserDTO requestingUser, CancellationToken cancellationToken = default)
     {
-        // Verifica daca ID-ul este valid
+        // Verifica daca Id-ul este valid
         if (id == Guid.Empty)
         {
             return ServiceResponse.FromError(CommonErrors.InvalidId);

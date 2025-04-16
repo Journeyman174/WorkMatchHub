@@ -19,7 +19,7 @@ public sealed class UserProjectionSpec : Specification<User, UserDTO>
     public UserProjectionSpec(bool orderByCreatedAt = false)
     {
         Query
-            .Include(e => e.Company); // Include compania doar daca utilizatorul este recruiter
+            .Include(e => e.Company); // Compania doar daca utilizatorul este recruiter
 
         Query
             .Select(e => new UserDTO
@@ -30,7 +30,7 @@ public sealed class UserProjectionSpec : Specification<User, UserDTO>
                 Role = e.Role,
                 FullName = e.FullName,
                 IsVerified = e.IsVerified,
-                CompanyName = e.Role == UserRoleEnum.Recruiter && e.Company != null ? e.Company.Name : "" // Afiseaza numele companiei doar pentru recruterii care au o companie asociata
+                CompanyName = e.Role == UserRoleEnum.Recruiter && e.Company != null ? e.Company.Name : "" // Afiseaza numele companiei doar pentru recruterii care au o companie asociata.
 
             });
 

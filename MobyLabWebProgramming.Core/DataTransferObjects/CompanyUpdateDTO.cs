@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace MobyLabWebProgramming.Core.DataTransferObjects;
 
-namespace MobyLabWebProgramming.Core.DataTransferObjects
+/// <summary>
+/// DTO folosit pentru actualizarea informatiilor unei companii.
+/// Proprietatile sunt optionale si pot fi actualizate individual.
+/// </summary>
+public class CompanyUpdateDTO
 {
-    public class CompanyUpdateDTO
-    {
-        public string? Name { get; set; }
-        public string? Description { get; set; }
-        public string? Location { get; set; }
-    }
+    public string? Name { get; set; } // Nume nou (optional)
+    public string? Description { get; set; } // Descriere noua (optional)
+    public string? Location { get; set; } // Locatie noua (optional)
 }

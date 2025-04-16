@@ -107,5 +107,4 @@ public class UserController(IUserService userService) : AuthorizedController(use
             ? FromServiceResponse(await UserService.VerifyUser(id, currentUser.Result))
             : ErrorMessageResult(currentUser.Error);
     }
-
 }

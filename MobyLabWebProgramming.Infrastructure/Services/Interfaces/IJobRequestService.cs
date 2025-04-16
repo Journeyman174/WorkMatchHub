@@ -7,7 +7,7 @@ namespace MobyLabWebProgramming.Infrastructure.Services.Interfaces;
 // Interfata defineste operatiile pentru gestionarea cererilor de job.
 public interface IJobRequestService
 {
-    // Returneaza o cerere de job dupa ID, doar daca utilizatorul are permisiune.
+    // Returneaza o cerere de job dupa Id, daca utilizatorul are permisiune.
     Task<ServiceResponse<JobRequestDTO>> GetJobRequest(Guid id, UserDTO requestingUser, CancellationToken cancellationToken = default);
 
     // Returneaza o lista paginata de cereri de job filtrata dupa utilizator.
@@ -15,6 +15,11 @@ public interface IJobRequestService
 
     // Adauga o cerere de job pentru un utilizator JobSeeker verificat.
     Task<ServiceResponse> AddJobRequest(JobRequestAddDTO jobRequest, UserDTO requestingUser, CancellationToken cancellationToken = default);
+
+    
+    //Actualizeaza scrisoarea de intentie pentru o cerere de job existenta.
+    Task<ServiceResponse> UpdateJobRequest(JobRequestUpdateDTO updateDTO, UserDTO requestingUser, CancellationToken cancellationToken = default);
+
 
     // Sterge o cerere de job daca utilizatorul este admin sau autorul cererii.
     Task<ServiceResponse> DeleteJobRequest(Guid id, UserDTO requestingUser, CancellationToken cancellationToken = default);

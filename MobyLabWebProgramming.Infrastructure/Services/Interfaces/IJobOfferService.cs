@@ -4,16 +4,16 @@ using MobyLabWebProgramming.Core.Responses;
 
 namespace MobyLabWebProgramming.Infrastructure.Services.Interfaces;
 
-// Interfata defineste operatiile disponibile pentru gestionarea ofertelor de munca.
+// Interfata pentru operatiile disponibile pentru gestionarea ofertelor de munca.
 public interface IJobOfferService
 {
-    // Returneaza o oferta de munca pe baza ID-ului.
+    // Returneaza o oferta de munca pe baza Id-ului.
     Task<ServiceResponse<JobOfferDTO>> GetJobOffer(Guid id, CancellationToken cancellationToken = default);
 
     // Returneaza o lista paginata de oferte de munca.
     Task<ServiceResponse<PagedResponse<JobOfferDTO>>> GetJobOffers(PaginationSearchQueryParams pagination, CancellationToken cancellationToken = default);
 
-    // Adauga o noua oferta de munca in sistem.
+    // Adauga o noua oferta de munca.
     Task<ServiceResponse> AddJobOffer(JobOfferAddDTO jobOffer, UserDTO requestingUser, CancellationToken cancellationToken = default);
 
     // Actualizeaza o oferta de munca existenta.

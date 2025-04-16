@@ -45,7 +45,7 @@ public interface IUserService
     /// <summary>
     /// Sets the user's verification status to true. This action is restricted to administrators.
     /// </summary>
-    /// <param name="userId">The ID of the user to be verified.</param>
+    /// <param name="userId">The Id of the user to be verified.</param>
     /// <param name="requestingUser">The user making the verification request. Must be an admin.</param>
     /// <param name="cancellationToken">Token to monitor for cancellation requests.</param>
     /// <returns>A service response indicating whether the operation was successful or failed.</returns>

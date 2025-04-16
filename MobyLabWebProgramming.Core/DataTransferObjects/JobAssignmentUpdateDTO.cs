@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace MobyLabWebProgramming.Core.DataTransferObjects;
 
-namespace MobyLabWebProgramming.Core.DataTransferObjects
+/// <summary>
+/// DTO folosit pentru a actualiza o alocare de job.
+/// </summary>
+public class JobAssignmentUpdateDTO
 {
-    public class JobAssignmentUpdateDTO
-    {
-        public DateTime? AssignedAt { get; set; }
-    }
+    public DateTime? AssignedAt { get; set; } // Noua data a alocarii (optional)
 }

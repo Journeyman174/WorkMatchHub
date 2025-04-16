@@ -144,7 +144,7 @@ public sealed class Repository<TDb>(TDb dbContext) : IRepository<TDb> where TDb 
 
     /// <summary>
     /// Deletes a given entity instance directly from the database.
-    /// This method is useful when the entity has a composite key and cannot be identified by a single Guid ID.
+    /// This method is useful when the entity has a composite key and cannot be identified by a single Guid Id.
     /// </summary>
     /// <typeparam name="T">The type of the entity to delete.</typeparam>
     /// <param name="entity">The instance of the entity to be deleted.</param>

@@ -1,14 +1,15 @@
-﻿namespace MobyLabWebProgramming.Core.DataTransferObjects
-{
-    public class JobOfferDTO
-    {
-        public Guid Id { get; set; }
-        public string Title { get; set; } = null!;
-        public string Description { get; set; } = null!;
-        public decimal Salary { get; set; }
+﻿namespace MobyLabWebProgramming.Core.DataTransferObjects;
 
-        public CompanyDTO Company { get; set; } = null!;
-        public UserDTO Recruiter { get; set; } = null!;
-        public DateTime CreatedAt { get; set; }
-    }
+/// <summary>
+/// DTO folosit pentru a transmite informatii despre o oferta de job.
+/// </summary>
+public class JobOfferDTO
+{
+    public Guid Id { get; set; } // Id-ul ofertei de job
+    public string Title { get; set; } = null!; // Titlul ofertei
+    public string Description { get; set; } = null!; // Descrierea ofertei
+    public decimal Salary { get; set; } // Salariul oferit
+    public CompanyDTO Company { get; set; } = null!; // Compania care ofera jobul
+    public UserDTO Recruiter { get; set; } = null!; // Recruiterul care a postat jobul
+    public DateTime CreatedAt { get; set; } // Data crearii ofertei
 }

@@ -1,12 +1,12 @@
 ﻿namespace MobyLabWebProgramming.Core.Entities;
 public class JobAssignment : BaseEntity
 {
-    // Id-ul cererii de job care a fost acceptata - cheie straina catre JobRequest
-    // Relatie de tip One-to-One: fiecare atribuire este legata de o singura cerere acceptata
+    // Id-ul cererii de job acceptata - cheie straina catre JobRequest
+    // Relatie One-to-One: fiecare atribuire este legata de o singura cerere acceptata
     public Guid JobRequestId { get; set; }
 
     // Id-ul ofertei de job care a fost atribuita - cheie straina catre JobOffer
-    // Relatie de tip Many-to-One: mai multe atribuiri pot fi legate de aceeasi oferta
+    // Relatie Many-to-One: mai multe atribuiri pot fi legate de aceeasi oferta
     public Guid JobOfferId { get; set; }
 
     // Data la care jobul a fost atribuit utilizatorului
@@ -16,7 +16,7 @@ public class JobAssignment : BaseEntity
     // Acelasi cu UserId-ul din JobRequest
     public Guid UserId { get; set; }
 
-    // Proprietate de navigare catre cererea de job care a fost acceptata
+    // Proprietate de navigare catre cererea de job acceptata
     public JobRequest JobRequest { get; set; } = null!;
 
     // Proprietate de navigare catre oferta de job atribuita

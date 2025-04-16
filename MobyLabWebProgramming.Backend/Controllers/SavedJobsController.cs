@@ -9,7 +9,7 @@ using MobyLabWebProgramming.Infrastructure.Services.Interfaces;
 namespace MobyLabWebProgramming.Backend.Controllers;
 
 /// <summary>
-/// Controller responsabil pentru gestionarea joburilor salvate de utilizatori.
+/// Controller gestioneaza joburile salvate de utilizatori.
 /// Permite adaugarea, stergerea, listarea, cautarea si verificarea existentei joburilor salvate.
 /// </summary>
 [ApiController]
@@ -41,6 +41,7 @@ public class SavedJobsController(ISavedJobService savedJobService, IUserService 
             ? FromServiceResponse(await savedJobService.AddSavedJob(savedJob, currentUser.Result, cancellationToken))
             : ErrorMessageResult(currentUser.Error);
     }
+
 
     /// <summary>
     /// Sterge un job salvat pe baza Id-ului ofertei de job.

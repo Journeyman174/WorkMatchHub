@@ -1,6 +1,4 @@
-﻿using System.Net;
-using MobyLabWebProgramming.Core.Constants;
-using MobyLabWebProgramming.Core.DataTransferObjects;
+﻿using MobyLabWebProgramming.Core.DataTransferObjects;
 using MobyLabWebProgramming.Core.Entities;
 using MobyLabWebProgramming.Core.Enums;
 using MobyLabWebProgramming.Core.Errors;
@@ -11,12 +9,12 @@ using MobyLabWebProgramming.Infrastructure.Database;
 using MobyLabWebProgramming.Infrastructure.Repositories.Interfaces;
 using MobyLabWebProgramming.Infrastructure.Services.Interfaces;
 
-// Serviciul gestioneaza operatiile pentru entitatile de tip companie.
+// Gestioneaza operatiile pentru entitatea Company.
 namespace MobyLabWebProgramming.Infrastructure.Services.Implementations;
 
 public class CompanyService(IRepository<WebAppDatabaseContext> repository) : ICompanyService
 {
-    // Returneaza detalii despre o companie dupa ID-ul acesteia.
+    // Returneaza detalii despre o companie dupa Id-ul acesteia.
     public async Task<ServiceResponse<CompanyDTO>> GetCompany(Guid id, CancellationToken cancellationToken = default)
     {
         if (id == Guid.Empty)

@@ -16,7 +16,7 @@ public interface ISavedJobService
     // Sterge un job salvat pentru utilizatorul curent.
     Task<ServiceResponse> DeleteSavedJob(Guid jobOfferId, UserDTO requestingUser, CancellationToken cancellationToken = default);
 
-    // Returneaza un job salvat specific dupa ID.
+    // Returneaza un job salvat specific dupa Id.
     Task<ServiceResponse<SavedJobDTO>> GetSavedJobById(Guid id, CancellationToken cancellationToken = default);
 
     // Returneaza toate joburile salvate de un utilizator fara paginare.

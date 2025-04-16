@@ -1,10 +1,11 @@
-﻿namespace MobyLabWebProgramming.Core.DataTransferObjects
+﻿namespace MobyLabWebProgramming.Core.DataTransferObjects;
+
+/// <summary>
+/// DTO folosit pentru a adauga o oferta de job.
+/// </summary>
+public class JobOfferAddDTO
 {
-    public class JobOfferAddDTO
-    {
-        public string Title { get; set; } = null!;
-        public string Description { get; set; } = null!;
-        public decimal Salary { get; set; }
-        public Guid CompanyId { get; set; } 
-    }
+    public string Title { get; set; } = null!; // Titlul ofertei
+    public string Description { get; set; } = null!; // Descrierea ofertei
+    public decimal Salary { get; set; } // Salariul oferit
 }

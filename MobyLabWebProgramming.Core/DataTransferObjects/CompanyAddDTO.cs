@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace MobyLabWebProgramming.Core.DataTransferObjects;
 
-namespace MobyLabWebProgramming.Core.DataTransferObjects
+/// <summary>
+/// DTO folosit pentru a adauga o companie.
+/// </summary>
+public class CompanyAddDTO
 {
-    public class CompanyAddDTO
-    {
-        public string Name { get; set; } = null!;
-        public string? Description { get; set; }
-        public string? Location { get; set; }
-    }
+    public string Name { get; set; } = null!; // Numele companiei
+    public string? Description { get; set; } // Descriere optionala
+    public string? Location { get; set; } // Locatia companiei
 }

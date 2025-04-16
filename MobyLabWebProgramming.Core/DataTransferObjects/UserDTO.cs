@@ -8,14 +8,11 @@ namespace MobyLabWebProgramming.Core.DataTransferObjects;
 /// </summary>
 public class UserDTO
 {
-    public Guid Id { get; set; }
-    public string Name { get; set; } = null!;
-    public string Email { get; set; } = null!;
-    public UserRoleEnum Role { get; set; }
-
-    public bool IsVerified { get; set; }         
-    public string? FullName { get; set; }
-
-    public string? CompanyName { get; set; } // Afiseaza numele companiei daca este Recruiter
-
+    public Guid Id { get; set; } // Unique identifier for the user.
+    public string Name { get; set; } = null!; // Username or display name.
+    public string Email { get; set; } = null!; // Email address of the user.
+    public UserRoleEnum Role { get; set; } // Role of the user (Admin, Recruiter, JobSeeker).
+    public bool IsVerified { get; set; } // Indicates if the user is verified.
+    public string? FullName { get; set; } // Full name of the user (optional).
+    public string? CompanyName { get; set; } // For Recruiters, displays the associated company name.
 }

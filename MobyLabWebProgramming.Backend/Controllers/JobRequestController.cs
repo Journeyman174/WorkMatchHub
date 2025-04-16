@@ -52,9 +52,23 @@ public class JobRequestController(IJobRequestService jobRequestService, IUserSer
     public async Task<ActionResult<RequestResponse>> Add([FromBody] JobRequestAddDTO jobRequest, CancellationToken cancellationToken)
     {
         var currentUser = await GetCurrentUser();
-
         return currentUser.Result != null
             ? FromServiceResponse(await jobRequestService.AddJobRequest(jobRequest, currentUser.Result, cancellationToken))
+            : ErrorMessageResult(currentUser.Error);
+    }
+
+    /// <summary>
+    /// Actualizeaza scrisoarea de intentie pentru o cerere de job.
+    /// Identificarea se face prin titlul jobului si numele companiei.
+    /// Doar utilizatorii de tip JobSeeker verificati pot face modificarea.
+    /// </summary>
+    [Authorize]
+    [HttpPut]
+    public async Task<ActionResult<RequestResponse>> Update([FromBody] JobRequestUpdateDTO updateDTO, CancellationToken cancellationToken)
+    {
+        var currentUser = await GetCurrentUser();
+        return currentUser.Result != null
+            ? FromServiceResponse(await jobRequestService.UpdateJobRequest(updateDTO, currentUser.Result, cancellationToken))
             : ErrorMessageResult(currentUser.Error);
     }
 

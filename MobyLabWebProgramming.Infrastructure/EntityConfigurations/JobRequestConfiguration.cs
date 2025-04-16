@@ -13,7 +13,7 @@ public class JobRequestConfiguration : IEntityTypeConfiguration<JobRequest>
         // Definire cheia primara
         builder.HasKey(jr => jr.Id);
 
-        // CoverLetter este optional si are o lungime de maxim 2000 de caractere
+        // CoverLetter este optional
         builder.Property(jr => jr.CoverLetter)
             .HasMaxLength(2000);
 
@@ -32,7 +32,6 @@ public class JobRequestConfiguration : IEntityTypeConfiguration<JobRequest>
             .OnDelete(DeleteBehavior.Restrict); // Nu permite stergerea utilizatorului daca are cereri
 
         // Relatie One-to-One: o cerere poate fi asociata cu un assignment
-        // Se mapeaza in sens invers in JobAssignment
         builder.HasOne(jr => jr.JobAssignment)
             .WithOne(ja => ja.JobRequest)
             .HasForeignKey<JobAssignment>(ja => ja.JobRequestId)

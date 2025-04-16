@@ -13,7 +13,7 @@ public class Company : BaseEntity
     // Id-ul utilizatorului caruia ii apartine compania - cheie straina catre entitatea User
     public Guid UserId { get; set; }
 
-    // Colectie de oferte de munca asociate companiei - relatie de tip One-to-Many
+    // Colectie de oferte de munca asociate companiei - relatie One-to-Many
     public ICollection<JobOffer> JobOffers { get; set; } = null!;
 
     // Referinta catre obiectul User asociat - proprietate de navigare

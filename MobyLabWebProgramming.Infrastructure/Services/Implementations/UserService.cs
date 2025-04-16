@@ -207,7 +207,7 @@ public class UserService(IRepository<WebAppDatabaseContext> repository, ILoginSe
             return ServiceResponse.FromError(CommonErrors.OnlyAdmin);
         }
 
-        // Validate the provided user ID
+        // Validate the provided user Id
         if (userId == Guid.Empty)
         {
             return ServiceResponse.FromError(CommonErrors.InvalidUserId);

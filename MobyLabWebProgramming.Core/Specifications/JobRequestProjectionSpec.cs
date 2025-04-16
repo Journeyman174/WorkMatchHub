@@ -83,7 +83,7 @@ public sealed class JobRequestProjectionSpec : Specification<JobRequest, JobRequ
         }
     }
 
-    // Constructor pentru cautare dupa ID-ul cererii
+    // Constructor pentru cautare dupa Id-ul cererii
     public JobRequestProjectionSpec(Guid id) : this()
     {
         Query.Where(jr => jr.Id == id);

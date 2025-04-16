@@ -5,15 +5,15 @@ using MobyLabWebProgramming.Core.Entities;
 
 namespace MobyLabWebProgramming.Core.Specifications;
 
- // Specificatie pentru proiectarea entitatii JobAssignment in JobAssignmentDTO, incluzand toate relatiile necesare pentru a evita erorile de tip null in frontend.
+ // Specificatie pentru proiectarea entitatii JobAssignment in JobAssignmentDTO.
 public sealed class JobAssignmentProjectionSpec : Specification<JobAssignment, JobAssignmentDTO>
 {
-    // Constructor pentru proiectia unui singur JobAssignment dupa ID.
+    // Constructor pentru proiectia unui JobAssignment dupa Id.
     public JobAssignmentProjectionSpec(Guid id)
     {
-        Query.Where(e => e.Id == id); // Cauta JobAssignment dupa ID
+        Query.Where(e => e.Id == id); // Cauta JobAssignment dupa Id
 
-        // Include toate relatiile relevante pentru maparea corecta
+        // Include relatiile relevante pentru mapare.
         Query
             .Include(e => e.JobRequest)
                 .ThenInclude(jr => jr.User)
@@ -27,7 +27,7 @@ public sealed class JobAssignmentProjectionSpec : Specification<JobAssignment, J
                 .ThenInclude(jo => jo.Company)
                     .ThenInclude(c => c.User);
 
-        // Proiectie in DTO, evitand valori null
+        // Proiectie in DTO.
         Query.Select(e => new JobAssignmentDTO
         {
             Id = e.Id,
@@ -134,10 +134,10 @@ public sealed class JobAssignmentProjectionSpec : Specification<JobAssignment, J
         });
     }
 
-    // Constructor pentru proiectia tuturor JobAssignments (folosit in GetPage).
+    // Constructor pentru proiectia tuturor JobAssignments (in GetPage).
     public JobAssignmentProjectionSpec()
     {
-        // Include relatiile la fel ca in constructorul cu ID
+        // Include relatiile la fel ca in constructorul cu Id
         Query
             .Include(e => e.JobRequest)
                 .ThenInclude(jr => jr.User)
