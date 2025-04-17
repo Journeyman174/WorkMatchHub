@@ -1,5 +1,4 @@
-﻿using System.Net;
-using MobyLabWebProgramming.Core.Constants;
+﻿using MobyLabWebProgramming.Core.Constants;
 using MobyLabWebProgramming.Core.DataTransferObjects;
 using MobyLabWebProgramming.Core.Entities;
 using MobyLabWebProgramming.Core.Enums;
@@ -167,6 +166,12 @@ public class UserService(IRepository<WebAppDatabaseContext> repository, ILoginSe
         // Update user fields with provided values
         entity.Name = user.Name ?? entity.Name;
         entity.Password = user.Password ?? entity.Password;
+        entity.FullName = user.FullName ?? entity.FullName;
+
+        if (user.IsVerified.HasValue && requestingUser?.Role == UserRoleEnum.Admin)
+        {
+            entity.IsVerified = user.IsVerified.Value;
+        }
 
         await repository.UpdateAsync(entity, cancellationToken);
 

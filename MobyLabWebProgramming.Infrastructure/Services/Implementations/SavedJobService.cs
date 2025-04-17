@@ -31,6 +31,12 @@ public class SavedJobService(IRepository<WebAppDatabaseContext> repository) : IS
             return ServiceResponse.FromError(CommonErrors.InvalidJobOfferData);
         }
 
+        // Verifica daca userul este verificat
+        if(!requestingUser.IsVerified)
+        {
+            return ServiceResponse.FromError(CommonErrors.Forbidden);
+        }
+
         // Cauta oferta de job dupa titlu si companie
         var jobOffer = await repository.GetAsync(new JobOfferSpec(savedJob.JobTitle.Trim(), savedJob.CompanyName.Trim(), true), cancellationToken);
         if (jobOffer == null)
